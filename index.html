@@ -1,0 +1,1454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<meta name="theme-color" content="#0f1117"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="description" content="StudyVault – Your personal student file portal"/>
+<title>StudyVault</title>
+<link rel="manifest" href="manifest.json"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#0f1117;--bg2:#161b27;--bg3:#1e2538;--card:#1a2035;--card2:#212840;--border:#2a3352;--accent:#4f8ef7;--accent2:#7c6ff7;--accent3:#f7c948;--green:#3dd68c;--red:#f76f72;--orange:#f7944d;--text:#e8ecf5;--text2:#8a94b0;--text3:#5c6580;--shadow:0 8px 32px rgba(0,0,0,0.45);--radius:16px;--radius-sm:10px;--font-head:'Syne',sans-serif;--font-body:'DM Sans',sans-serif;--transition:0.22s cubic-bezier(.4,0,.2,1);}
+.light-mode{--bg:#f0f4ff;--bg2:#e4eaf8;--bg3:#d8e0f5;--card:#ffffff;--card2:#f5f8ff;--border:#c8d3f0;--text:#1a2035;--text2:#4a5580;--text3:#8a94b0;--shadow:0 8px 32px rgba(79,142,247,0.10);}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:15px;transition:background var(--transition),color var(--transition);}
+::-webkit-scrollbar{width:4px;height:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+#app{display:flex;flex-direction:column;height:100vh;max-width:480px;margin:0 auto;position:relative;overflow:hidden;}
+#app::before{content:'';position:fixed;top:-120px;left:50%;transform:translateX(-50%);width:320px;height:320px;background:radial-gradient(circle,rgba(79,142,247,0.18) 0%,transparent 70%);pointer-events:none;z-index:0;}
+#app::after{content:'';position:fixed;bottom:-80px;right:20px;width:200px;height:200px;background:radial-gradient(circle,rgba(124,111,247,0.13) 0%,transparent 70%);pointer-events:none;z-index:0;}
+header{position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:18px 20px 14px;background:var(--bg);border-bottom:1px solid var(--border);}
+.logo{display:flex;align-items:center;gap:10px;}
+.logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 0 18px rgba(79,142,247,0.35);}
+.logo-text{font-family:var(--font-head);font-size:20px;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.header-actions{display:flex;gap:8px;}
+.icon-btn{width:38px;height:38px;border-radius:var(--radius-sm);background:var(--bg3);border:1px solid var(--border);color:var(--text2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:17px;transition:all var(--transition);position:relative;}
+.icon-btn:active{transform:scale(0.93);}
+.icon-btn.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+.notif-dot{position:absolute;top:6px;right:6px;width:8px;height:8px;background:var(--red);border-radius:50%;border:2px solid var(--bg);}
+nav{position:relative;z-index:10;display:flex;background:var(--bg2);border-top:1px solid var(--border);padding:6px 0 env(safe-area-inset-bottom,6px);}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 4px;cursor:pointer;border:none;background:transparent;color:var(--text3);font-family:var(--font-body);font-size:10px;font-weight:500;transition:color var(--transition);position:relative;}
+.nav-btn .nav-icon{font-size:20px;transition:transform var(--transition);}
+.nav-btn.active{color:var(--accent);}
+.nav-btn.active .nav-icon{transform:translateY(-2px);}
+.nav-btn.active::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:40px;height:2px;background:var(--accent);border-radius:0 0 3px 3px;}
+.nav-badge{position:absolute;top:4px;right:50%;transform:translateX(14px);background:var(--red);color:#fff;font-size:9px;font-weight:700;padding:1px 5px;border-radius:10px;min-width:16px;text-align:center;}
+#pages{flex:1;overflow:hidden;position:relative;z-index:1;}
+.page{position:absolute;inset:0;overflow-y:auto;padding:16px 16px 100px;display:none;animation:pageIn 0.3s ease;}
+.page.active{display:block;}
+@keyframes pageIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.greeting{margin-bottom:18px;}
+.greeting h2{font-family:var(--font-head);font-size:22px;font-weight:800;line-height:1.2;}
+.greeting p{color:var(--text2);font-size:13px;margin-top:3px;}
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px;}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px 10px;text-align:center;transition:transform var(--transition);}
+.stat-card:active{transform:scale(0.97);}
+.stat-num{font-family:var(--font-head);font-size:24px;font-weight:800;color:var(--accent);}
+.stat-label{font-size:11px;color:var(--text2);margin-top:2px;}
+.section-title{font-family:var(--font-head);font-size:16px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;}
+.section-title span{font-size:12px;color:var(--accent);font-family:var(--font-body);font-weight:500;cursor:pointer;}
+.recent-list{display:flex;flex-direction:column;gap:10px;}
+.file-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;display:flex;align-items:center;gap:12px;position:relative;overflow:hidden;transition:transform var(--transition);}
+.file-card:active{transform:scale(0.98);}
+.file-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:3px 0 0 3px;}
+.file-card.note::before{background:var(--accent);}
+.file-card.photo::before{background:var(--green);}
+.file-card.video::before{background:var(--red);}
+.file-card.pdf::before{background:var(--orange);}
+.file-card.link::before{background:var(--accent2);}
+.file-card.youtube::before{background:#ff0000;}
+.file-card-icon{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.file-card.note .file-card-icon{background:rgba(79,142,247,0.15);}
+.file-card.photo .file-card-icon{background:rgba(61,214,140,0.15);}
+.file-card.video .file-card-icon{background:rgba(247,111,114,0.15);}
+.file-card.pdf .file-card-icon{background:rgba(247,148,77,0.15);}
+.file-card.link .file-card-icon{background:rgba(124,111,247,0.15);}
+.file-card.youtube .file-card-icon{background:rgba(255,0,0,0.12);}
+.file-card-info{flex:1;min-width:0;}
+.file-card-name{font-weight:600;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.file-card-meta{font-size:11px;color:var(--text2);margin-top:2px;}
+.file-card-badge{font-size:10px;padding:2px 8px;border-radius:20px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;}
+.note .file-card-badge{background:rgba(79,142,247,0.15);color:var(--accent);}
+.photo .file-card-badge{background:rgba(61,214,140,0.15);color:var(--green);}
+.video .file-card-badge{background:rgba(247,111,114,0.15);color:var(--red);}
+.pdf .file-card-badge{background:rgba(247,148,77,0.15);color:var(--orange);}
+.link .file-card-badge{background:rgba(124,111,247,0.15);color:var(--accent2);}
+.youtube .file-card-badge{background:rgba(255,0,0,0.12);color:#ff4444;}
+.file-actions{display:flex;gap:6px;flex-shrink:0;}
+.file-action-btn{width:30px;height:30px;border-radius:8px;background:var(--bg3);border:1px solid var(--border);color:var(--text2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;transition:all var(--transition);}
+.file-action-btn:active{transform:scale(0.9);}
+.file-action-btn.del:active{background:rgba(247,111,114,0.2);color:var(--red);}
+.file-action-btn.share-btn:active{background:rgba(61,214,140,0.2);color:var(--green);}
+.cat-scroll{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:18px;scrollbar-width:none;}
+.cat-scroll::-webkit-scrollbar{display:none;}
+.cat-chip{flex-shrink:0;padding:7px 16px;border-radius:30px;border:1.5px solid var(--border);background:var(--card);color:var(--text2);font-size:13px;font-weight:500;cursor:pointer;transition:all var(--transition);white-space:nowrap;display:flex;align-items:center;gap:6px;}
+.cat-chip.active{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 0 16px rgba(79,142,247,0.35);}
+.cat-chip:active{transform:scale(0.95);}
+.cat-manage-list{display:flex;flex-direction:column;gap:10px;margin-bottom:16px;}
+.cat-manage-item{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;display:flex;align-items:center;gap:12px;}
+.cat-manage-emoji{font-size:22px;width:36px;text-align:center;}
+.cat-manage-name{flex:1;font-weight:600;}
+.cat-manage-count{font-size:12px;color:var(--text2);margin-right:8px;}
+.cat-del-btn{width:30px;height:30px;border-radius:8px;background:rgba(247,111,114,0.1);border:1px solid rgba(247,111,114,0.25);color:var(--red);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all var(--transition);}
+.cat-del-btn:active{transform:scale(0.9);background:rgba(247,111,114,0.2);}
+.cat-built-in{opacity:0.5;pointer-events:none;}
+.fab{position:fixed;bottom:80px;right:20px;width:56px;height:56px;border-radius:18px;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;color:#fff;font-size:26px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 24px rgba(79,142,247,0.45);z-index:20;transition:transform var(--transition);}
+.fab:active{transform:scale(0.93);}
+.fab.hidden{display:none;}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:30;display:none;align-items:flex-end;animation:fadeIn 0.2s ease;}
+.modal-overlay.open{display:flex;}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.bottom-sheet{background:var(--bg2);border-radius:24px 24px 0 0;padding:20px 20px 36px;width:100%;max-height:88vh;overflow-y:auto;animation:slideUp 0.3s cubic-bezier(.4,0,.2,1);}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.sheet-handle{width:40px;height:4px;background:var(--border);border-radius:4px;margin:0 auto 20px;}
+.sheet-title{font-family:var(--font-head);font-size:18px;font-weight:800;margin-bottom:18px;}
+.form-group{margin-bottom:14px;}
+.form-label{font-size:12px;font-weight:600;color:var(--text2);margin-bottom:6px;display:block;text-transform:uppercase;letter-spacing:0.5px;}
+.form-input{width:100%;background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;color:var(--text);font-family:var(--font-body);font-size:14px;outline:none;transition:border-color var(--transition);}
+.form-input:focus{border-color:var(--accent);}
+.form-input::placeholder{color:var(--text3);}
+select.form-input{cursor:pointer;appearance:none;-webkit-appearance:none;}
+textarea.form-input{resize:none;min-height:80px;}
+.type-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:4px;}
+.type-btn{padding:12px 6px;border-radius:var(--radius-sm);border:1.5px solid var(--border);background:var(--bg3);color:var(--text2);cursor:pointer;text-align:center;font-size:12px;font-weight:600;transition:all var(--transition);display:flex;flex-direction:column;align-items:center;gap:4px;}
+.type-btn .type-emoji{font-size:22px;}
+.type-btn.active{border-color:var(--accent);background:rgba(79,142,247,0.12);color:var(--accent);}
+.type-btn:active{transform:scale(0.95);}
+.btn-primary{width:100%;padding:14px;border-radius:var(--radius-sm);background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;color:#fff;font-family:var(--font-head);font-size:15px;font-weight:700;cursor:pointer;transition:transform var(--transition);box-shadow:0 4px 18px rgba(79,142,247,0.35);}
+.btn-primary:active{transform:scale(0.97);}
+.btn-secondary{width:100%;padding:13px;border-radius:var(--radius-sm);background:transparent;border:1.5px solid var(--border);color:var(--text);font-family:var(--font-body);font-size:14px;font-weight:600;cursor:pointer;transition:all var(--transition);margin-top:8px;}
+.btn-secondary:active{background:var(--bg3);}
+.file-upload-area{border:2px dashed var(--border);border-radius:var(--radius);padding:24px;text-align:center;cursor:pointer;transition:border-color var(--transition);background:var(--bg3);margin-bottom:4px;}
+.file-upload-area:active,.file-upload-area.drag-over{border-color:var(--accent);background:rgba(79,142,247,0.07);}
+.file-upload-icon{font-size:32px;margin-bottom:8px;}
+.file-upload-text{font-size:13px;color:var(--text2);}
+.file-upload-hint{font-size:11px;color:var(--text3);margin-top:4px;}
+input[type=file]{display:none;}
+.profile-hero{background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:20px;padding:24px;text-align:center;margin-bottom:18px;position:relative;overflow:hidden;}
+.profile-hero::before{content:'';position:absolute;top:-30px;right:-30px;width:100px;height:100px;background:rgba(255,255,255,0.1);border-radius:50%;}
+.profile-hero::after{content:'';position:absolute;bottom:-20px;left:-20px;width:80px;height:80px;background:rgba(255,255,255,0.07);border-radius:50%;}
+.profile-avatar{width:72px;height:72px;border-radius:50%;background:rgba(255,255,255,0.25);border:3px solid rgba(255,255,255,0.4);display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 12px;position:relative;z-index:1;cursor:pointer;overflow:hidden;}
+.profile-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.profile-name{font-family:var(--font-head);font-size:20px;font-weight:800;color:#fff;position:relative;z-index:1;}
+.profile-sub{font-size:13px;color:rgba(255,255,255,0.75);margin-top:3px;position:relative;z-index:1;}
+.profile-section{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:14px;overflow:hidden;}
+.profile-item{padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:background var(--transition);}
+.profile-item:not(:last-child){border-bottom:1px solid var(--border);}
+.profile-item:active{background:var(--bg3);}
+.profile-item-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;}
+.profile-item-info{flex:1;}
+.profile-item-label{font-weight:600;font-size:14px;}
+.profile-item-value{font-size:12px;color:var(--text2);margin-top:1px;}
+.profile-item-arrow{color:var(--text3);font-size:16px;}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;}
+.toggle{width:44px;height:24px;border-radius:24px;background:var(--bg3);border:1.5px solid var(--border);position:relative;cursor:pointer;transition:background var(--transition);}
+.toggle.on{background:var(--accent);border-color:var(--accent);}
+.toggle::after{content:'';position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;transition:transform var(--transition);}
+.toggle.on::after{transform:translateX(20px);}
+.about-hero{text-align:center;padding:24px 16px;background:var(--card);border:1px solid var(--border);border-radius:20px;margin-bottom:16px;}
+.about-app-icon{width:72px;height:72px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;margin:0 auto 14px;box-shadow:0 0 28px rgba(79,142,247,0.4);}
+.about-app-name{font-family:var(--font-head);font-size:24px;font-weight:800;}
+.about-version{font-size:12px;color:var(--text2);margin-top:4px;}
+.about-desc{font-size:13px;color:var(--text2);margin-top:10px;line-height:1.6;}
+.dev-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:14px;}
+.dev-title{font-size:11px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px;}
+.dev-info{display:flex;align-items:center;gap:14px;}
+.dev-avatar{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,var(--accent2),var(--accent));display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.dev-name{font-family:var(--font-head);font-size:16px;font-weight:800;}
+.dev-email{font-size:12px;color:var(--accent);margin-top:3px;}
+.search-bar{position:relative;margin-bottom:16px;}
+.search-input{width:100%;background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:11px 14px 11px 40px;color:var(--text);font-family:var(--font-body);font-size:14px;outline:none;transition:border-color var(--transition);}
+.search-input:focus{border-color:var(--accent);}
+.search-input::placeholder{color:var(--text3);}
+.search-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:16px;}
+.empty-state{text-align:center;padding:40px 20px;color:var(--text2);}
+.empty-icon{font-size:48px;margin-bottom:12px;opacity:0.6;}
+.empty-title{font-family:var(--font-head);font-size:18px;font-weight:700;color:var(--text);margin-bottom:6px;}
+.empty-desc{font-size:13px;line-height:1.6;}
+.toast-container{position:fixed;top:0;left:50%;transform:translateX(-50%);z-index:99;display:flex;flex-direction:column;align-items:center;gap:6px;padding-top:12px;pointer-events:none;max-width:480px;width:100%;}
+.toast{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:10px 18px;font-size:13px;font-weight:500;box-shadow:var(--shadow);animation:toastIn 0.3s ease;display:flex;align-items:center;gap:8px;pointer-events:auto;}
+.toast.success{border-color:var(--green);color:var(--green);}
+.toast.error{border-color:var(--red);color:var(--red);}
+.toast.info{border-color:var(--accent);color:var(--accent);}
+@keyframes toastIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes toastOut{from{opacity:1}to{opacity:0;transform:translateY(-10px)}}
+.divider{height:1px;background:var(--border);margin:12px 0;}
+.share-export-row{display:flex;gap:8px;margin-top:8px;}
+.share-export-row .btn-secondary{margin-top:0;flex:1;}
+.thumb-preview{width:100%;max-height:120px;object-fit:cover;border-radius:var(--radius-sm);margin-bottom:10px;display:none;}
+.progress-bar{height:4px;background:var(--bg3);border-radius:4px;overflow:hidden;margin-top:6px;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0%;transition:width 0.3s ease;border-radius:4px;}
+
+/* ===== STORAGE BANNER ===== */
+.storage-banner{background:linear-gradient(135deg,rgba(79,142,247,0.15),rgba(124,111,247,0.15));border:1px solid var(--accent);border-radius:var(--radius);padding:14px 16px;margin-bottom:18px;display:flex;align-items:center;gap:12px;cursor:pointer;}
+.storage-banner-icon{font-size:24px;}
+.storage-banner-info{flex:1;}
+.storage-banner-title{font-weight:700;font-size:13px;color:var(--accent);}
+.storage-banner-sub{font-size:12px;color:var(--text2);margin-top:2px;}
+.storage-bar{height:6px;background:var(--bg3);border-radius:6px;overflow:hidden;margin-top:8px;}
+.storage-bar-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--green),var(--accent));transition:width 0.5s ease;}
+
+/* ===== TODO PAGE ===== */
+.todo-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.todo-tabs{display:flex;gap:6px;margin-bottom:16px;}
+.todo-tab{flex:1;padding:8px;border-radius:var(--radius-sm);border:1.5px solid var(--border);background:var(--card);color:var(--text2);font-size:12px;font-weight:600;cursor:pointer;text-align:center;transition:all var(--transition);}
+.todo-tab.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+.todo-tab:active{transform:scale(0.96);}
+.todo-list{display:flex;flex-direction:column;gap:10px;}
+.todo-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px 14px 14px 16px;display:flex;align-items:flex-start;gap:12px;position:relative;overflow:hidden;transition:all var(--transition);}
+.todo-card.done{opacity:0.6;}
+.todo-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:3px 0 0 3px;background:var(--accent);}
+.todo-card.priority-high::before{background:var(--red);}
+.todo-card.priority-medium::before{background:var(--orange);}
+.todo-card.priority-low::before{background:var(--green);}
+.todo-card.done::before{background:var(--text3);}
+.todo-check{width:22px;height:22px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;margin-top:1px;transition:all var(--transition);}
+.todo-check.checked{background:var(--green);border-color:var(--green);color:#fff;}
+.todo-check:active{transform:scale(0.9);}
+.todo-body{flex:1;min-width:0;}
+.todo-title{font-weight:600;font-size:14px;line-height:1.4;}
+.todo-card.done .todo-title{text-decoration:line-through;color:var(--text3);}
+.todo-meta{display:flex;align-items:center;gap:8px;margin-top:5px;flex-wrap:wrap;}
+.todo-due{font-size:11px;color:var(--text2);display:flex;align-items:center;gap:3px;}
+.todo-due.overdue{color:var(--red);}
+.todo-due.today{color:var(--orange);}
+.todo-priority{font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;text-transform:uppercase;letter-spacing:0.5px;}
+.todo-priority.high{background:rgba(247,111,114,0.15);color:var(--red);}
+.todo-priority.medium{background:rgba(247,148,77,0.15);color:var(--orange);}
+.todo-priority.low{background:rgba(61,214,140,0.15);color:var(--green);}
+.todo-subject{font-size:11px;color:var(--text2);background:var(--bg3);padding:2px 7px;border-radius:20px;}
+.todo-actions{display:flex;gap:5px;flex-shrink:0;}
+.todo-progress-row{margin-top:8px;}
+.todo-progress-label{font-size:11px;color:var(--text3);margin-bottom:4px;display:flex;justify-content:space-between;}
+.todo-subtask-list{margin-top:8px;display:flex;flex-direction:column;gap:5px;}
+.subtask-item{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text2);cursor:pointer;}
+.subtask-check{width:16px;height:16px;border-radius:4px;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;transition:all var(--transition);}
+.subtask-check.checked{background:var(--green);border-color:var(--green);color:#fff;}
+.subtask-text.done-sub{text-decoration:line-through;color:var(--text3);}
+.notif-permission-card{background:linear-gradient(135deg,rgba(247,201,72,0.12),rgba(247,148,77,0.12));border:1px solid var(--accent3);border-radius:var(--radius);padding:16px;margin-bottom:16px;display:flex;gap:12px;align-items:flex-start;}
+.notif-perm-icon{font-size:24px;flex-shrink:0;}
+.notif-perm-title{font-weight:700;font-size:13px;color:var(--accent3);}
+.notif-perm-desc{font-size:12px;color:var(--text2);margin-top:3px;line-height:1.5;}
+.notif-perm-btn{margin-top:10px;padding:8px 16px;border-radius:8px;background:var(--accent3);border:none;color:#1a1200;font-weight:700;font-size:12px;cursor:pointer;transition:transform var(--transition);}
+.notif-perm-btn:active{transform:scale(0.96);}
+.todo-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px;}
+.todo-stat{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px;text-align:center;}
+.todo-stat-num{font-family:var(--font-head);font-size:20px;font-weight:800;}
+.todo-stat-label{font-size:10px;color:var(--text2);margin-top:2px;}
+.priority-selector{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.prio-btn{padding:10px;border-radius:var(--radius-sm);border:1.5px solid var(--border);background:var(--bg3);color:var(--text2);font-size:12px;font-weight:700;cursor:pointer;text-align:center;transition:all var(--transition);}
+.prio-btn.active-high{border-color:var(--red);background:rgba(247,111,114,0.12);color:var(--red);}
+.prio-btn.active-medium{border-color:var(--orange);background:rgba(247,148,77,0.12);color:var(--orange);}
+.prio-btn.active-low{border-color:var(--green);background:rgba(61,214,140,0.12);color:var(--green);}
+.prio-btn:active{transform:scale(0.95);}
+.subtask-input-row{display:flex;gap:8px;margin-top:8px;}
+.subtask-input-row .form-input{margin:0;}
+.add-subtask-btn{padding:10px 14px;border-radius:var(--radius-sm);background:var(--bg3);border:1.5px solid var(--border);color:var(--text2);cursor:pointer;font-size:18px;flex-shrink:0;transition:all var(--transition);}
+.add-subtask-btn:active{background:var(--accent);color:#fff;border-color:var(--accent);}
+.pending-subtasks{display:flex;flex-direction:column;gap:6px;margin-top:8px;}
+.pending-subtask-item{display:flex;align-items:center;gap:8px;background:var(--bg3);border-radius:8px;padding:7px 10px;font-size:13px;}
+.pending-subtask-item span{flex:1;}
+.remove-sub-btn{color:var(--red);background:none;border:none;cursor:pointer;font-size:15px;padding:0 4px;}
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <div class="logo">
+      <div class="logo-icon">📚</div>
+      <div class="logo-text">StudyVault</div>
+    </div>
+    <div class="header-actions">
+      <button class="icon-btn" id="searchToggleBtn" title="Search">🔍</button>
+      <button class="icon-btn" id="darkModeBtn" title="Dark/Light Mode">🌙</button>
+    </div>
+  </header>
+
+  <div id="pages">
+    <!-- HOME -->
+    <div class="page active" id="page-home">
+      <div id="searchBarHome" style="display:none"><div class="search-bar"><span class="search-icon">🔍</span><input class="search-input" id="homeSearchInput" placeholder="Search your files..." autocomplete="off"/></div></div>
+      <div class="greeting"><h2 id="greetingText">Good morning! 👋</h2><p id="greetingName">Welcome to StudyVault</p></div>
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-num" id="totalFilesCount">0</div><div class="stat-label">Total Files</div></div>
+        <div class="stat-card"><div class="stat-num" id="totalCatsCount">0</div><div class="stat-label">Categories</div></div>
+        <div class="stat-card"><div class="stat-num" id="totalSizeDisplay">0B</div><div class="stat-label">Storage</div></div>
+      </div>
+      <div id="storageBanner" class="storage-banner" onclick="requestStoragePermission()" style="display:none">
+        <div class="storage-banner-icon">💾</div>
+        <div class="storage-banner-info">
+          <div class="storage-banner-title">Tap to unlock full storage</div>
+          <div class="storage-banner-sub" id="storageUsedText">Request persistent storage access</div>
+          <div class="storage-bar"><div class="storage-bar-fill" id="storageBarFill" style="width:0%"></div></div>
+        </div>
+        <div style="font-size:20px;">→</div>
+      </div>
+      <div id="todoHomeSection">
+        <div class="section-title">Today's Tasks <span onclick="navigateTo('todo')">See all →</span></div>
+        <div id="homeTodoList" class="todo-list" style="margin-bottom:18px;"></div>
+      </div>
+      <div class="section-title">Recent Files <span onclick="navigateTo('files')">See all →</span></div>
+      <div class="recent-list" id="recentList"></div>
+    </div>
+
+    <!-- FILES -->
+    <div class="page" id="page-files">
+      <div class="search-bar"><span class="search-icon">🔍</span><input class="search-input" id="filesSearchInput" placeholder="Search files..." autocomplete="off"/></div>
+      <div class="cat-scroll" id="catFilterRow"></div>
+      <div id="filesList"></div>
+    </div>
+
+    <!-- TODO -->
+    <div class="page" id="page-todo">
+      <div class="todo-header">
+        <div style="font-family:var(--font-head);font-size:20px;font-weight:800;">📋 To-Do List</div>
+        <button class="icon-btn" onclick="openAddTodoSheet()" style="width:auto;padding:0 14px;font-size:13px;font-weight:700;color:var(--accent);">+ Add</button>
+      </div>
+      <div id="notifPermCard" class="notif-permission-card" style="display:none">
+        <div class="notif-perm-icon">🔔</div>
+        <div>
+          <div class="notif-perm-title">Enable Notifications</div>
+          <div class="notif-perm-desc">Get reminders for overdue and upcoming tasks so you never miss a deadline.</div>
+          <button class="notif-perm-btn" onclick="requestNotifPermission()">Allow Notifications</button>
+        </div>
+      </div>
+      <div class="todo-stats">
+        <div class="todo-stat"><div class="todo-stat-num" id="todoTotal" style="color:var(--accent)">0</div><div class="todo-stat-label">Total</div></div>
+        <div class="todo-stat"><div class="todo-stat-num" id="todoPending" style="color:var(--orange)">0</div><div class="todo-stat-label">Pending</div></div>
+        <div class="todo-stat"><div class="todo-stat-num" id="todoDone" style="color:var(--green)">0</div><div class="todo-stat-label">Done</div></div>
+      </div>
+      <div class="todo-tabs">
+        <div class="todo-tab active" onclick="setTodoTab('all',this)">All</div>
+        <div class="todo-tab" onclick="setTodoTab('pending',this)">Pending</div>
+        <div class="todo-tab" onclick="setTodoTab('today',this)">Today</div>
+        <div class="todo-tab" onclick="setTodoTab('done',this)">Done</div>
+      </div>
+      <div class="todo-list" id="todoList"></div>
+    </div>
+
+    <!-- CATEGORIES -->
+    <div class="page" id="page-categories">
+      <div class="section-title" style="margin-bottom:6px;">My Categories</div>
+      <p style="font-size:13px;color:var(--text2);margin-bottom:16px;">Built-in categories can't be deleted. Add custom ones below.</p>
+      <div class="cat-manage-list" id="catManageList"></div>
+      <button class="btn-primary" onclick="openAddCatSheet()">+ Add New Category</button>
+    </div>
+
+    <!-- PROFILE -->
+    <div class="page" id="page-profile">
+      <div class="profile-hero">
+        <div class="profile-avatar" id="profileAvatarBtn"><span id="profileAvatarEmoji">👤</span><img id="profileAvatarImg" src="" alt="" style="display:none;"/></div>
+        <input type="file" id="avatarFileInput" accept="image/*"/>
+        <div class="profile-name" id="profileNameDisplay">Student</div>
+        <div class="profile-sub" id="profileEmailDisplay">Tap to edit your profile</div>
+      </div>
+      <div class="profile-section">
+        <div class="profile-item" onclick="openEditProfile()">
+          <div class="profile-item-icon" style="background:rgba(79,142,247,0.15)">✏️</div>
+          <div class="profile-item-info"><div class="profile-item-label">Edit Profile</div><div class="profile-item-value">Name, email, institution</div></div>
+          <div class="profile-item-arrow">›</div>
+        </div>
+        <div class="toggle-row">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div class="profile-item-icon" style="background:rgba(247,201,72,0.15);width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;">🌙</div>
+            <div><div class="profile-item-label">Dark Mode</div><div class="profile-item-value" style="font-size:12px;color:var(--text2);">Toggle appearance</div></div>
+          </div>
+          <div class="toggle" id="darkToggle" onclick="toggleDark()"></div>
+        </div>
+      </div>
+      <div class="profile-section">
+        <div class="profile-item" onclick="requestStoragePermission()">
+          <div class="profile-item-icon" style="background:rgba(61,214,140,0.15)">💾</div>
+          <div class="profile-item-info"><div class="profile-item-label">Storage Permission</div><div class="profile-item-value" id="storageStatusText">Tap to request persistent storage</div></div>
+          <div class="profile-item-arrow">›</div>
+        </div>
+        <div class="profile-item" onclick="requestNotifPermission()">
+          <div class="profile-item-icon" style="background:rgba(247,201,72,0.15)">🔔</div>
+          <div class="profile-item-info"><div class="profile-item-label">Notifications</div><div class="profile-item-value" id="notifStatusText">Tap to enable task reminders</div></div>
+          <div class="profile-item-arrow">›</div>
+        </div>
+      </div>
+      <div class="profile-section">
+        <div class="profile-item" onclick="exportAllFiles()">
+          <div class="profile-item-icon" style="background:rgba(61,214,140,0.15)">📤</div>
+          <div class="profile-item-info"><div class="profile-item-label">Export All Data</div><div class="profile-item-value">Share your vault backup</div></div>
+          <div class="profile-item-arrow">›</div>
+        </div>
+        <div class="profile-item" onclick="importFiles()">
+          <div class="profile-item-icon" style="background:rgba(124,111,247,0.15)">📥</div>
+          <div class="profile-item-info"><div class="profile-item-label">Import Data</div><div class="profile-item-value">Restore from backup</div></div>
+          <div class="profile-item-arrow">›</div>
+        </div>
+        <input type="file" id="importFileInput" accept=".json"/>
+      </div>
+      <div class="profile-section">
+        <div class="profile-item" onclick="navigateTo('about')">
+          <div class="profile-item-icon" style="background:rgba(247,148,77,0.15)">ℹ️</div>
+          <div class="profile-item-info"><div class="profile-item-label">About StudyVault</div><div class="profile-item-value">Developer info & version</div></div>
+          <div class="profile-item-arrow">›</div>
+        </div>
+        <div class="profile-item" onclick="clearAllData()">
+          <div class="profile-item-icon" style="background:rgba(247,111,114,0.15)">🗑️</div>
+          <div class="profile-item-info"><div class="profile-item-label" style="color:var(--red)">Clear All Data</div><div class="profile-item-value">Delete everything</div></div>
+          <div class="profile-item-arrow">›</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ABOUT -->
+    <div class="page" id="page-about">
+      <div class="about-hero">
+        <div class="about-app-icon">📚</div>
+        <div class="about-app-name">StudyVault</div>
+        <div class="about-version">Version 2.0.0 · Offline PWA</div>
+        <div class="about-desc">Your personal student file portal — store notes, photos, PDFs, videos, links, to-dos and more. All data stays on your device, no internet needed after install.</div>
+      </div>
+      <div class="dev-card">
+        <div class="dev-title">Developer</div>
+        <div class="dev-info"><div class="dev-avatar">👨‍💻</div><div><div class="dev-name">Md. Tamim Iqbal</div><div class="dev-email">tamimjobs01@gmail.com</div></div></div>
+      </div>
+      <div class="profile-section">
+        <div class="profile-item"><div class="profile-item-icon" style="background:rgba(79,142,247,0.15)">📱</div><div class="profile-item-info"><div class="profile-item-label">Platform</div><div class="profile-item-value">PWA · Android 10+ · iOS · Desktop</div></div></div>
+        <div class="profile-item"><div class="profile-item-icon" style="background:rgba(61,214,140,0.15)">🔒</div><div class="profile-item-info"><div class="profile-item-label">Privacy</div><div class="profile-item-value">100% local · No cloud · No tracking</div></div></div>
+        <div class="profile-item"><div class="profile-item-icon" style="background:rgba(247,148,77,0.15)">⚡</div><div class="profile-item-info"><div class="profile-item-label">Works Offline</div><div class="profile-item-value">Full functionality without internet</div></div></div>
+        <div class="profile-item"><div class="profile-item-icon" style="background:rgba(124,111,247,0.15)">🔔</div><div class="profile-item-info"><div class="profile-item-label">New in v2.0</div><div class="profile-item-value">To-Do list · Notifications · Storage API</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <nav>
+    <button class="nav-btn active" data-page="home" onclick="navigateTo('home')"><span class="nav-icon">🏠</span>Home</button>
+    <button class="nav-btn" data-page="files" onclick="navigateTo('files')"><span class="nav-icon">📁</span>Files</button>
+    <button class="nav-btn" data-page="todo" onclick="navigateTo('todo')"><span class="nav-icon">✅</span>Tasks<span class="nav-badge" id="todoBadge" style="display:none">0</span></button>
+    <button class="nav-btn" data-page="categories" onclick="navigateTo('categories')"><span class="nav-icon">🗂️</span>Categories</button>
+    <button class="nav-btn" data-page="profile" onclick="navigateTo('profile')"><span class="nav-icon">👤</span>Profile</button>
+  </nav>
+
+  <button class="fab" id="fabBtn" onclick="onFab()">+</button>
+  <div class="toast-container" id="toastContainer"></div>
+</div>
+
+<!-- MODALS -->
+<!-- Add File -->
+<div class="modal-overlay" id="addFileModal" onclick="closeOnBackdrop(event,'addFileModal')">
+  <div class="bottom-sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">Add New File</div>
+    <div class="form-group"><label class="form-label">File Type</label><div class="type-grid" id="typeGrid"></div></div>
+    <div class="form-group" id="fileUploadGroup">
+      <label class="form-label">Upload File</label>
+      <div class="file-upload-area" id="fileUploadArea" onclick="document.getElementById('fileInput').click()">
+        <div class="file-upload-icon">📎</div><div class="file-upload-text">Tap to select a file</div><div class="file-upload-hint">or drag & drop here</div>
+      </div>
+      <input type="file" id="fileInput"/>
+      <div class="progress-bar" id="uploadProgress" style="display:none"><div class="progress-fill" id="progressFill"></div></div>
+      <img id="thumbPreview" class="thumb-preview" alt=""/>
+    </div>
+    <div class="form-group" id="linkInputGroup" style="display:none"><label class="form-label">URL / Link</label><input class="form-input" id="linkInput" type="url" placeholder="https://..."/></div>
+    <div class="form-group"><label class="form-label">Title</label><input class="form-input" id="fileTitle" placeholder="Give your file a name..."/></div>
+    <div class="form-group"><label class="form-label">Category</label><select class="form-input" id="fileCategorySelect"></select></div>
+    <div class="form-group"><label class="form-label">Notes (optional)</label><textarea class="form-input" id="fileNotes" placeholder="Add any notes..."></textarea></div>
+    <button class="btn-primary" onclick="saveFile()">Save to Vault</button>
+    <button class="btn-secondary" onclick="closeModal('addFileModal')">Cancel</button>
+  </div>
+</div>
+
+<!-- Add Todo -->
+<div class="modal-overlay" id="addTodoModal" onclick="closeOnBackdrop(event,'addTodoModal')">
+  <div class="bottom-sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title" id="todoModalTitle">New Task</div>
+    <div class="form-group"><label class="form-label">Task Title</label><input class="form-input" id="todoTitle" placeholder="What do you need to do?"/></div>
+    <div class="form-group"><label class="form-label">Subject / Tag</label><input class="form-input" id="todoSubject" placeholder="e.g. Math, Physics, Assignment..."/></div>
+    <div class="form-group"><label class="form-label">Due Date & Time</label><input class="form-input" id="todoDue" type="datetime-local"/></div>
+    <div class="form-group">
+      <label class="form-label">Priority</label>
+      <div class="priority-selector">
+        <button class="prio-btn" onclick="selectPrio('high',this)">🔴 High</button>
+        <button class="prio-btn active-medium" onclick="selectPrio('medium',this)">🟡 Medium</button>
+        <button class="prio-btn" onclick="selectPrio('low',this)">🟢 Low</button>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Sub-tasks (optional)</label>
+      <div class="subtask-input-row"><input class="form-input" id="subtaskInput" placeholder="Add a sub-task..."/><button class="add-subtask-btn" onclick="addPendingSubtask()">+</button></div>
+      <div class="pending-subtasks" id="pendingSubtasks"></div>
+    </div>
+    <div class="form-group"><label class="form-label">Notes</label><textarea class="form-input" id="todoNotes" placeholder="Any extra details..."></textarea></div>
+    <button class="btn-primary" onclick="saveTodo()">Save Task</button>
+    <button class="btn-secondary" onclick="closeModal('addTodoModal')">Cancel</button>
+  </div>
+</div>
+
+<!-- Add Category -->
+<div class="modal-overlay" id="addCatModal" onclick="closeOnBackdrop(event,'addCatModal')">
+  <div class="bottom-sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">New Category</div>
+    <div class="form-group"><label class="form-label">Emoji Icon</label><input class="form-input" id="catEmoji" placeholder="e.g. 📖" maxlength="4"/></div>
+    <div class="form-group"><label class="form-label">Category Name</label><input class="form-input" id="catName" placeholder="e.g. Assignments"/></div>
+    <button class="btn-primary" onclick="saveCategory()">Add Category</button>
+    <button class="btn-secondary" onclick="closeModal('addCatModal')">Cancel</button>
+  </div>
+</div>
+
+<!-- Edit Profile -->
+<div class="modal-overlay" id="editProfileModal" onclick="closeOnBackdrop(event,'editProfileModal')">
+  <div class="bottom-sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">Edit Profile</div>
+    <div class="form-group"><label class="form-label">Your Name</label><input class="form-input" id="editName" placeholder="e.g. Tamim"/></div>
+    <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="editEmail" type="email" placeholder="your@email.com"/></div>
+    <div class="form-group"><label class="form-label">Institution</label><input class="form-input" id="editInstitution" placeholder="e.g. Dhaka University"/></div>
+    <button class="btn-primary" onclick="saveProfile()">Save Profile</button>
+    <button class="btn-secondary" onclick="closeModal('editProfileModal')">Cancel</button>
+  </div>
+</div>
+
+<!-- View File -->
+<div class="modal-overlay" id="viewFileModal" onclick="closeOnBackdrop(event,'viewFileModal')">
+  <div class="bottom-sheet" id="viewFileContent"><div class="sheet-handle"></div></div>
+</div>
+
+<script>
+// ============================================================
+// STUDYVAULT v2.0 — Full App Logic
+// ============================================================
+let db;
+let state = {
+  files:[],categories:[],todos:[],
+  profile:{name:'Student',email:'',institution:''},
+  dark:true,activeFilter:'all',currentPage:'home',
+  addFileType:'note',selectedFileData:null,selectedFileName:'',selectedFileMime:'',
+  todoFilter:'all',editingTodoId:null,
+  todoPriority:'medium',pendingSubtasks:[],
+  notifGranted:false,storageGranted:false
+};
+const BUILT_IN_CATS=[
+  {id:'note',name:'Notes',emoji:'📝',builtIn:true},
+  {id:'photo',name:'Photos',emoji:'🖼️',builtIn:true},
+  {id:'video',name:'Video Courses',emoji:'🎬',builtIn:true},
+  {id:'link',name:'Course Links',emoji:'🔗',builtIn:true},
+  {id:'youtube',name:'YouTube',emoji:'▶️',builtIn:true},
+  {id:'pdf',name:'PDFs',emoji:'📄',builtIn:true},
+];
+
+// ===== INDEXEDDB =====
+function initDB(){
+  return new Promise((res,rej)=>{
+    const req=indexedDB.open('StudyVaultDB',3);
+    req.onupgradeneeded=(e)=>{
+      const d=e.target.result;
+      if(!d.objectStoreNames.contains('files'))d.createObjectStore('files',{keyPath:'id'});
+      if(!d.objectStoreNames.contains('blobs'))d.createObjectStore('blobs',{keyPath:'id'});
+    };
+    req.onsuccess=(e)=>{db=e.target.result;res();};
+    req.onerror=()=>rej(req.error);
+  });
+}
+function dbSaveBlob(id,blob){return new Promise((res,rej)=>{const tx=db.transaction('blobs','readwrite');tx.objectStore('blobs').put({id,blob});tx.oncomplete=res;tx.onerror=rej;});}
+function dbGetBlob(id){return new Promise(res=>{const tx=db.transaction('blobs','readonly');const req=tx.objectStore('blobs').get(id);req.onsuccess=()=>res(req.result?req.result.blob:null);req.onerror=()=>res(null);});}
+function dbDeleteBlob(id){return new Promise(res=>{const tx=db.transaction('blobs','readwrite');tx.objectStore('blobs').delete(id);tx.oncomplete=res;tx.onerror=res;});}
+
+// ===== LOCALSTORAGE =====
+function saveState(){const s={...state};delete s.selectedFileData;localStorage.setItem('studyvault_state',JSON.stringify(s));}
+function loadState(){
+  try{
+    const raw=localStorage.getItem('studyvault_state');
+    if(raw){
+      const p=JSON.parse(raw);
+      state.files=p.files||[];
+      state.todos=p.todos||[];
+      state.categories=p.categories||[];
+      state.profile=p.profile||{name:'Student',email:'',institution:''};
+      state.dark=p.dark!==undefined?p.dark:true;
+      state.notifGranted=p.notifGranted||false;
+      state.storageGranted=p.storageGranted||false;
+    }else{state.categories=[...BUILT_IN_CATS];}
+    if(!state.categories||state.categories.length===0)state.categories=[...BUILT_IN_CATS];
+    if(!state.todos)state.todos=[];
+  }catch(e){state.categories=[...BUILT_IN_CATS];}
+}
+
+// ===== NAVIGATION =====
+function navigateTo(page){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  const btn=document.querySelector(`.nav-btn[data-page="${page}"]`);
+  if(btn)btn.classList.add('active');
+  state.currentPage=page;
+  const fab=document.getElementById('fabBtn');
+  fab.classList.toggle('hidden',!['home','files','todo'].includes(page));
+  if(page==='home')renderHome();
+  if(page==='files')renderFiles();
+  if(page==='todo')renderTodo();
+  if(page==='categories')renderCategories();
+  if(page==='profile')renderProfile();
+}
+function onFab(){
+  if(state.currentPage==='todo')openAddTodoSheet();
+  else openAddFileSheet();
+}
+
+// ===== DARK MODE =====
+function applyDark(){
+  document.body.classList.toggle('light-mode',!state.dark);
+  document.getElementById('darkModeBtn').textContent=state.dark?'🌙':'☀️';
+  const dt=document.getElementById('darkToggle');
+  if(dt)dt.classList.toggle('on',state.dark);
+}
+function toggleDark(){state.dark=!state.dark;applyDark();saveState();}
+
+// ===== STORAGE PERMISSION =====
+async function requestStoragePermission(){
+  // First check if already persisted
+  if(navigator.storage&&navigator.storage.persisted){
+    const already=await navigator.storage.persisted().catch(()=>false);
+    if(already){
+      toast('✅ Storage is already protected!','success');
+      updateStorageUI();return;
+    }
+  }
+  if(navigator.storage&&navigator.storage.persist){
+    let granted=false;
+    try{granted=await navigator.storage.persist();}catch(e){}
+    state.storageGranted=granted;saveState();
+    if(granted){
+      toast('✅ Persistent storage granted! Files are fully protected.','success');
+    }else{
+      // Chrome auto-denies unless PWA is installed — show helpful guide
+      showStorageGuide();
+    }
+  }else{
+    toast('Your browser supports storage. Files are saved in IndexedDB.','info');
+  }
+  updateStorageUI();
+}
+
+function showStorageGuide(){
+  // Show an in-app modal with exact steps instead of just an error
+  const overlay=document.createElement('div');
+  overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:50;display:flex;align-items:flex-end;';
+  overlay.innerHTML=`<div style="background:var(--bg2);border-radius:24px 24px 0 0;padding:24px 20px 40px;width:100%;max-height:85vh;overflow-y:auto;animation:slideUp 0.3s ease;">
+    <div style="width:40px;height:4px;background:var(--border);border-radius:4px;margin:0 auto 20px;"></div>
+    <div style="font-family:var(--font-head);font-size:18px;font-weight:800;margin-bottom:6px;">💾 How to Protect Storage</div>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:18px;line-height:1.6;">Chrome only grants persistent storage to <b style="color:var(--text)">installed PWA apps</b>. Your files are already saved — this just prevents Chrome from deleting them if storage is very low.</p>
+    <div style="background:var(--card);border-radius:var(--radius);overflow:hidden;margin-bottom:16px;">
+      ${[
+        ['1️⃣','Open this app in Chrome','Make sure you use Chrome browser, not Samsung Browser'],
+        ['2️⃣','Tap ⋮ menu → "Add to Home screen"','This installs StudyVault as a real app'],
+        ['3️⃣','Open from your Home Screen icon','Always open via the icon, not the browser'],
+        ['4️⃣','Come back here and tap again','Chrome will grant storage to installed PWAs'],
+      ].map(([icon,title,sub],i,arr)=>`<div style="padding:14px 16px;${i<arr.length-1?'border-bottom:1px solid var(--border)':''};display:flex;gap:12px;align-items:flex-start;">
+        <span style="font-size:20px;flex-shrink:0;">${icon}</span>
+        <div><div style="font-weight:600;font-size:14px;">${title}</div><div style="font-size:12px;color:var(--text2);margin-top:2px;">${sub}</div></div>
+      </div>`).join('')}
+    </div>
+    <div style="background:rgba(61,214,140,0.1);border:1px solid var(--green);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:16px;font-size:13px;color:var(--green);">
+      ✅ Your files are <b>already safe in IndexedDB</b>. This permission is an extra layer of protection.
+    </div>
+    <button onclick="this.closest('div[style*=fixed]').remove()" style="width:100%;padding:14px;border-radius:var(--radius-sm);background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;color:#fff;font-family:var(--font-head);font-size:15px;font-weight:700;cursor:pointer;">Got it!</button>
+  </div>`;
+  document.body.appendChild(overlay);
+  overlay.addEventListener('click',e=>{if(e.target===overlay)overlay.remove();});
+}
+
+async function updateStorageUI(){
+  if(navigator.storage&&navigator.storage.estimate){
+    try{
+      const est=await navigator.storage.estimate();
+      const used=est.usage||0;const quota=est.quota||1;
+      const pct=Math.min(100,Math.round(used/quota*100));
+      const usedMB=(used/1048576).toFixed(1);
+      const quotaLabel=quota>1073741824?(quota/1073741824).toFixed(1)+' GB':(quota/1048576).toFixed(0)+' MB';
+      const el=document.getElementById('storageUsedText');
+      if(el)el.textContent=`${usedMB} MB used of ${quotaLabel}`;
+      const bar=document.getElementById('storageBarFill');
+      if(bar)bar.style.width=pct+'%';
+      const isPersisted=await navigator.storage.persisted().catch(()=>false);
+      const banner=document.getElementById('storageBanner');
+      const titleEl=banner?banner.querySelector('.storage-banner-title'):null;
+      if(banner){
+        banner.style.display='flex';
+        if(titleEl)titleEl.textContent=isPersisted?`✅ Storage protected · ${pct}% used`:`💾 ${usedMB} MB used · Tap to protect`;
+      }
+      const stText=document.getElementById('storageStatusText');
+      if(stText)stText.textContent=isPersisted?'✅ Persistent storage active — files fully protected':'Files saved in IndexedDB · Tap for extra protection';
+    }catch(e){}
+  }
+}
+
+// ===== NOTIFICATIONS =====
+async function requestNotifPermission(){
+  if(!('Notification' in window)){
+    showNotifGuide('not-supported');return;
+  }
+  const current=Notification.permission;
+  if(current==='denied'){
+    showNotifGuide('denied');return;
+  }
+  if(current==='granted'){
+    state.notifGranted=true;saveState();
+    toast('🔔 Notifications already enabled!','success');
+    updateNotifUI();scheduleAllNotifications();return;
+  }
+  // Request it
+  let perm;
+  try{perm=await Notification.requestPermission();}catch(e){perm='denied';}
+  state.notifGranted=perm==='granted';saveState();
+  if(perm==='granted'){
+    toast('🔔 Notifications enabled! You will get task reminders.','success');
+    updateNotifUI();
+    document.getElementById('notifPermCard').style.display='none';
+    scheduleAllNotifications();
+  }else if(perm==='denied'){
+    showNotifGuide('denied');
+  }else{
+    toast('Please tap "Allow" when the popup appears','info');
+  }
+}
+
+function showNotifGuide(reason){
+  const overlay=document.createElement('div');
+  overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:50;display:flex;align-items:flex-end;';
+  const isDenied=reason==='denied';
+  overlay.innerHTML=`<div style="background:var(--bg2);border-radius:24px 24px 0 0;padding:24px 20px 40px;width:100%;animation:slideUp 0.3s ease;">
+    <div style="width:40px;height:4px;background:var(--border);border-radius:4px;margin:0 auto 20px;"></div>
+    <div style="font-size:36px;text-align:center;margin-bottom:10px;">${isDenied?'🔕':'🔔'}</div>
+    <div style="font-family:var(--font-head);font-size:18px;font-weight:800;margin-bottom:8px;text-align:center;">${isDenied?'Notifications Blocked':'Not Supported'}</div>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:20px;line-height:1.6;text-align:center;">${isDenied?'You blocked notifications before. Follow these steps to re-enable them:':'Your browser does not support push notifications. Use Chrome on Android.'}</p>
+    ${isDenied?`<div style="background:var(--card);border-radius:var(--radius);overflow:hidden;margin-bottom:16px;">
+      ${[
+        ['📱','Open Chrome Settings','Tap ⋮ menu → Settings'],
+        ['🔒','Go to Site Settings','Settings → Site Settings → Notifications'],
+        ['🔍','Find StudyVault','Look for your GitHub Pages URL'],
+        ['✅','Change to Allow','Tap it → change Blocked to Allow'],
+        ['🔄','Come back & tap again','Return to app and tap Allow Notifications'],
+      ].map(([icon,title,sub],i,arr)=>`<div style="padding:13px 16px;${i<arr.length-1?'border-bottom:1px solid var(--border)':''};display:flex;gap:12px;align-items:flex-start;">
+        <span style="font-size:18px;flex-shrink:0;">${icon}</span>
+        <div><div style="font-weight:600;font-size:13px;">${title}</div><div style="font-size:12px;color:var(--text2);margin-top:2px;">${sub}</div></div>
+      </div>`).join('')}
+    </div>
+    <div style="background:rgba(247,201,72,0.1);border:1px solid var(--accent3);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:16px;font-size:12px;color:var(--accent3);">
+      💡 In-app alerts still work even without system notifications. Overdue tasks are highlighted in red automatically.
+    </div>`:''}
+    <button onclick="this.closest('div[style*=fixed]').remove()" style="width:100%;padding:14px;border-radius:var(--radius-sm);background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;color:#fff;font-family:var(--font-head);font-size:15px;font-weight:700;cursor:pointer;">OK, Got it!</button>
+  </div>`;
+  document.body.appendChild(overlay);
+  overlay.addEventListener('click',e=>{if(e.target===overlay)overlay.remove();});
+}
+
+function updateNotifUI(){
+  if(!('Notification' in window))return;
+  const perm=Notification.permission;
+  const notifCard=document.getElementById('notifPermCard');
+  const notifText=document.getElementById('notifStatusText');
+  if(perm==='granted'){
+    state.notifGranted=true;
+    if(notifCard)notifCard.style.display='none';
+    if(notifText)notifText.textContent='✅ Notifications enabled';
+  }else if(perm==='denied'){
+    if(notifCard)notifCard.style.display='flex';
+    if(notifText)notifText.textContent='❌ Blocked — tap for fix instructions';
+  }else{
+    if(notifCard)notifCard.style.display='flex';
+    if(notifText)notifText.textContent='Tap to enable task reminders';
+  }
+}
+
+function checkNotifPermStatus(){updateNotifUI();}
+
+function sendNotification(title,body,tag){
+  if(!('Notification' in window)||Notification.permission!=='granted')return;
+  try{
+    // Use service worker notification if available (works when app is backgrounded)
+    if(navigator.serviceWorker&&navigator.serviceWorker.controller){
+      navigator.serviceWorker.ready.then(reg=>{
+        reg.showNotification(title,{body,tag:tag||'studyvault',icon:'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="12" fill="%234f8ef7"/><text y="48" x="8" font-size="40">📚</text></svg>',badge:'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="12" fill="%234f8ef7"/><text y="48" x="8" font-size="40">📚</text></svg>',vibrate:[200,100,200]});
+      }).catch(()=>{new Notification(title,{body,tag:tag||'studyvault'});});
+    }else{
+      new Notification(title,{body,tag:tag||'studyvault'});
+    }
+  }catch(e){}
+}
+
+function scheduleAllNotifications(){
+  if(!state.notifGranted||Notification.permission!=='granted')return;
+  const now=Date.now();
+  const shown=JSON.parse(sessionStorage.getItem('sv_notif_shown')||'[]');
+  const newShown=[...shown];
+  state.todos.filter(t=>!t.done&&t.dueDate).forEach(t=>{
+    const due=t.dueDate;const diff=due-now;
+    const overdueKey='ov_'+t.id;const soonKey='sn_'+t.id;
+    if(diff<0&&!shown.includes(overdueKey)){
+      sendNotification('⚠️ Overdue Task!',`"${t.title}" was due ${new Date(due).toLocaleDateString()}`,overdueKey);
+      newShown.push(overdueKey);
+    }else if(diff>0&&diff<3600000&&!shown.includes(soonKey)){
+      const mins=Math.round(diff/60000);
+      sendNotification('⏰ Due Soon!',`"${t.title}" is due in ${mins} minute${mins!==1?'s':''}`,soonKey);
+      newShown.push(soonKey);
+    }
+  });
+  // Keep only last 50 to avoid memory bloat
+  sessionStorage.setItem('sv_notif_shown',JSON.stringify(newShown.slice(-50)));
+}
+
+// Run notification check every 30 minutes
+function startNotifChecker(){
+  setInterval(()=>{
+    if(state.notifGranted&&Notification.permission==='granted')scheduleAllNotifications();
+    updateTodoBadge();
+  },30*60*1000);
+  document.addEventListener('visibilitychange',()=>{
+    if(!document.hidden){
+      updateStorageUI();
+      if(state.notifGranted&&Notification.permission==='granted')scheduleAllNotifications();
+    }
+  });
+}
+
+// ===== TODO LOGIC =====
+function openAddTodoSheet(editId){
+  state.editingTodoId=editId||null;
+  state.pendingSubtasks=[];
+  document.getElementById('pendingSubtasks').innerHTML='';
+  document.getElementById('todoTitle').value='';
+  document.getElementById('todoSubject').value='';
+  document.getElementById('todoNotes').value='';
+  document.getElementById('subtaskInput').value='';
+  // Set default due to tomorrow
+  const tmr=new Date();tmr.setDate(tmr.getDate()+1);tmr.setHours(23,59,0,0);
+  document.getElementById('todoDue').value=tmr.toISOString().slice(0,16);
+  selectPrio('medium');
+  if(editId){
+    const t=state.todos.find(x=>x.id===editId);
+    if(t){
+      document.getElementById('todoModalTitle').textContent='Edit Task';
+      document.getElementById('todoTitle').value=t.title;
+      document.getElementById('todoSubject').value=t.subject||'';
+      document.getElementById('todoNotes').value=t.notes||'';
+      if(t.dueDate)document.getElementById('todoDue').value=new Date(t.dueDate).toISOString().slice(0,16);
+      selectPrio(t.priority||'medium');
+      state.pendingSubtasks=[...(t.subtasks||[]).map(s=>({text:s.text,done:s.done}))];
+      renderPendingSubtasks();
+    }
+  }else{
+    document.getElementById('todoModalTitle').textContent='New Task';
+  }
+  openModal('addTodoModal');
+}
+
+function selectPrio(p,btn){
+  state.todoPriority=p;
+  document.querySelectorAll('.prio-btn').forEach(b=>{b.className='prio-btn';});
+  const active=btn||document.querySelector(`.prio-btn:nth-child(${p==='high'?1:p==='medium'?2:3})`);
+  if(active)active.className=`prio-btn active-${p}`;
+}
+
+function addPendingSubtask(){
+  const val=document.getElementById('subtaskInput').value.trim();
+  if(!val)return;
+  state.pendingSubtasks.push({text:val,done:false});
+  document.getElementById('subtaskInput').value='';
+  renderPendingSubtasks();
+}
+
+function renderPendingSubtasks(){
+  document.getElementById('pendingSubtasks').innerHTML=state.pendingSubtasks.map((s,i)=>`
+    <div class="pending-subtask-item">
+      <span>${escHtml(s.text)}</span>
+      <button class="remove-sub-btn" onclick="removePendingSubtask(${i})">✕</button>
+    </div>`).join('');
+}
+
+function removePendingSubtask(i){
+  state.pendingSubtasks.splice(i,1);
+  renderPendingSubtasks();
+}
+
+document.getElementById('subtaskInput').addEventListener('keydown',(e)=>{if(e.key==='Enter'){e.preventDefault();addPendingSubtask();}});
+
+function saveTodo(){
+  const title=document.getElementById('todoTitle').value.trim();
+  if(!title){toast('Enter a task title','error');return;}
+  const dueVal=document.getElementById('todoDue').value;
+  const todo={
+    id:state.editingTodoId||('t_'+Date.now()+'_'+Math.random().toString(36).slice(2)),
+    title,
+    subject:document.getElementById('todoSubject').value.trim(),
+    notes:document.getElementById('todoNotes').value.trim(),
+    dueDate:dueVal?new Date(dueVal).getTime():null,
+    priority:state.todoPriority,
+    subtasks:[...state.pendingSubtasks],
+    done:false,
+    createdAt:Date.now()
+  };
+  if(state.editingTodoId){
+    const idx=state.todos.findIndex(x=>x.id===state.editingTodoId);
+    if(idx>-1){todo.done=state.todos[idx].done;state.todos[idx]=todo;}
+  }else{
+    state.todos.push(todo);
+  }
+  saveState();
+  closeModal('addTodoModal');
+  toast(state.editingTodoId?'Task updated!':'Task added! 📋','success');
+  updateTodoBadge();
+  if(state.currentPage==='todo')renderTodo();
+  if(state.currentPage==='home')renderHome();
+  // Schedule notification
+  if(state.notifGranted&&todo.dueDate){
+    const diff=todo.dueDate-Date.now();
+    if(diff>0&&diff<86400000){
+      sendNotification('📋 Task Added',`"${todo.title}" is due ${new Date(todo.dueDate).toLocaleString()}`,'added_'+todo.id);
+    }
+  }
+}
+
+function toggleTodoDone(id){
+  const t=state.todos.find(x=>x.id===id);
+  if(!t)return;
+  t.done=!t.done;
+  saveState();
+  updateTodoBadge();
+  if(state.currentPage==='todo')renderTodo();
+  if(state.currentPage==='home')renderHome();
+  if(t.done)toast('Task completed! 🎉','success');
+}
+
+function toggleSubtask(todoId,subIdx){
+  const t=state.todos.find(x=>x.id===todoId);
+  if(!t||!t.subtasks)return;
+  t.subtasks[subIdx].done=!t.subtasks[subIdx].done;
+  // Auto-complete if all subtasks done
+  if(t.subtasks.length>0&&t.subtasks.every(s=>s.done)){t.done=true;toast('All sub-tasks done! Task completed! 🎉','success');}
+  saveState();
+  if(state.currentPage==='todo')renderTodo();
+  if(state.currentPage==='home')renderHome();
+}
+
+function deleteTodo(id){
+  if(!confirm('Delete this task?'))return;
+  state.todos=state.todos.filter(x=>x.id!==id);
+  saveState();
+  updateTodoBadge();
+  if(state.currentPage==='todo')renderTodo();
+  if(state.currentPage==='home')renderHome();
+  toast('Task deleted','info');
+}
+
+function setTodoTab(filter,el){
+  state.todoFilter=filter;
+  document.querySelectorAll('.todo-tab').forEach(t=>t.classList.remove('active'));
+  if(el)el.classList.add('active');
+  renderTodo();
+}
+
+function updateTodoBadge(){
+  const pending=state.todos.filter(t=>!t.done).length;
+  const badge=document.getElementById('todoBadge');
+  if(pending>0){badge.textContent=pending>99?'99+':pending;badge.style.display='block';}
+  else{badge.style.display='none';}
+}
+
+function todoDueLabel(ts){
+  if(!ts)return null;
+  const now=new Date();const due=new Date(ts);
+  const today=now.toDateString()===due.toDateString();
+  const tmr=new Date(now);tmr.setDate(tmr.getDate()+1);
+  const isTmr=tmr.toDateString()===due.toDateString();
+  const overdue=due<now;
+  const timeStr=due.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+  if(overdue)return{label:'Overdue · '+due.toLocaleDateString(),cls:'overdue'};
+  if(today)return{label:'Today · '+timeStr,cls:'today'};
+  if(isTmr)return{label:'Tomorrow · '+timeStr,cls:''};
+  return{label:due.toLocaleDateString('en-GB',{day:'2-digit',month:'short'})+' · '+timeStr,cls:''};
+}
+
+function todoCardHTML(t){
+  const due=todoDueLabel(t.dueDate);
+  const prioClass=`priority-${t.priority||'medium'}`;
+  const done=t.done?'done':'';
+  const completedSubs=(t.subtasks||[]).filter(s=>s.done).length;
+  const totalSubs=(t.subtasks||[]).length;
+  const hasSubtasks=totalSubs>0;
+  const subPct=totalSubs?Math.round(completedSubs/totalSubs*100):0;
+  return `<div class="todo-card ${prioClass} ${done}" id="tc_${t.id}">
+    <div class="todo-check ${t.done?'checked':''}" onclick="toggleTodoDone('${t.id}')">${t.done?'✓':''}</div>
+    <div class="todo-body">
+      <div class="todo-title">${escHtml(t.title)}</div>
+      <div class="todo-meta">
+        ${due?`<span class="todo-due ${due.cls}">📅 ${due.label}</span>`:''}
+        ${t.subject?`<span class="todo-subject">${escHtml(t.subject)}</span>`:''}
+        <span class="todo-priority ${t.priority||'medium'}">${t.priority||'medium'}</span>
+      </div>
+      ${hasSubtasks?`<div class="todo-progress-row">
+        <div class="todo-progress-label"><span>Sub-tasks</span><span>${completedSubs}/${totalSubs}</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:${subPct}%"></div></div>
+      </div>
+      <div class="todo-subtask-list">${(t.subtasks||[]).map((s,i)=>`
+        <div class="subtask-item" onclick="toggleSubtask('${t.id}',${i})">
+          <div class="subtask-check ${s.done?'checked':''}">${s.done?'✓':''}</div>
+          <span class="subtask-text ${s.done?'done-sub':''}">${escHtml(s.text)}</span>
+        </div>`).join('')}</div>`:''}
+    </div>
+    <div class="todo-actions">
+      <button class="file-action-btn" onclick="openAddTodoSheet('${t.id}')" title="Edit">✏️</button>
+      <button class="file-action-btn del" onclick="deleteTodo('${t.id}')" title="Delete">🗑️</button>
+    </div>
+  </div>`;
+}
+
+function renderTodo(){
+  checkNotifPermStatus();
+  const todos=state.todos;
+  const total=todos.length;
+  const pending=todos.filter(t=>!t.done).length;
+  const done=todos.filter(t=>t.done).length;
+  document.getElementById('todoTotal').textContent=total;
+  document.getElementById('todoPending').textContent=pending;
+  document.getElementById('todoDone').textContent=done;
+  const now=new Date();
+  let filtered=todos;
+  if(state.todoFilter==='pending')filtered=todos.filter(t=>!t.done);
+  else if(state.todoFilter==='done')filtered=todos.filter(t=>t.done);
+  else if(state.todoFilter==='today')filtered=todos.filter(t=>{
+    if(!t.dueDate)return false;
+    return new Date(t.dueDate).toDateString()===now.toDateString();
+  });
+  // Sort: overdue first, then by due date, then no date
+  filtered.sort((a,b)=>{
+    if(a.done!==b.done)return a.done?1:-1;
+    if(!a.dueDate&&!b.dueDate)return b.createdAt-a.createdAt;
+    if(!a.dueDate)return 1;if(!b.dueDate)return -1;
+    return a.dueDate-b.dueDate;
+  });
+  const list=document.getElementById('todoList');
+  if(filtered.length===0){
+    list.innerHTML=`<div class="empty-state"><div class="empty-icon">✅</div><div class="empty-title">${state.todoFilter==='done'?'No completed tasks yet':'All clear!'}</div><div class="empty-desc">${state.todoFilter==='pending'?'No pending tasks.':state.todoFilter==='today'?'Nothing due today.':'Tap + to add a task.'}</div></div>`;
+  }else{
+    list.innerHTML=filtered.map(todoCardHTML).join('');
+  }
+}
+
+// ===== RENDER HOME =====
+function renderHome(){
+  updateGreeting();
+  document.getElementById('totalFilesCount').textContent=state.files.length;
+  document.getElementById('totalCatsCount').textContent=state.categories.length;
+  const totalSize=state.files.reduce((a,f)=>a+(f.size||0),0);
+  document.getElementById('totalSizeDisplay').textContent=formatSize(totalSize);
+  updateStorageUI();
+  // Today's tasks
+  const now=new Date();
+  const todayTasks=state.todos.filter(t=>{
+    if(!t.dueDate)return false;
+    return new Date(t.dueDate).toDateString()===now.toDateString()||(!t.done&&new Date(t.dueDate)<now);
+  }).sort((a,b)=>(a.dueDate||0)-(b.dueDate||0)).slice(0,4);
+  const htl=document.getElementById('homeTodoList');
+  if(todayTasks.length===0){
+    htl.innerHTML=`<div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;text-align:center;color:var(--text2);font-size:13px;">🎉 No tasks due today!</div>`;
+  }else{
+    htl.innerHTML=todayTasks.map(t=>{
+      const due=todoDueLabel(t.dueDate);
+      return `<div class="todo-card priority-${t.priority||'medium'} ${t.done?'done':''}" onclick="navigateTo('todo')">
+        <div class="todo-check ${t.done?'checked':''}" onclick="event.stopPropagation();toggleTodoDone('${t.id}')">${t.done?'✓':''}</div>
+        <div class="todo-body">
+          <div class="todo-title">${escHtml(t.title)}</div>
+          <div class="todo-meta">${due?`<span class="todo-due ${due.cls}">📅 ${due.label}</span>`:''}${t.subject?`<span class="todo-subject">${escHtml(t.subject)}</span>`:''}</div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+  // Recent files
+  const recent=[...state.files].sort((a,b)=>b.createdAt-a.createdAt).slice(0,5);
+  const list=document.getElementById('recentList');
+  if(recent.length===0){
+    list.innerHTML=`<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-title">No files yet</div><div class="empty-desc">Tap + to add your first file</div></div>`;
+  }else{
+    list.innerHTML=recent.map(f=>fileCardHTML(f)).join('');
+  }
+}
+
+function updateGreeting(){
+  const h=new Date().getHours();
+  const g=h<12?'Good morning':h<17?'Good afternoon':'Good evening';
+  document.getElementById('greetingText').textContent=g+' 👋';
+  document.getElementById('greetingName').textContent='Welcome back, '+(state.profile.name||'Student');
+}
+
+// ===== FILE CARD =====
+function fileCardHTML(f){
+  const meta=getTypeMeta(f.type);
+  const date=new Date(f.createdAt).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+  const typeClass=['note','photo','video','pdf','link','youtube'].includes(f.type)?f.type:'note';
+  return `<div class="file-card ${typeClass}" onclick="viewFile('${f.id}')">
+    <div class="file-card-icon">${meta.emoji}</div>
+    <div class="file-card-info">
+      <div class="file-card-name">${escHtml(f.title)}</div>
+      <div class="file-card-meta">${date}${f.size?' · '+formatSize(f.size):''}${f.notes?' · '+escHtml(f.notes).substring(0,30):''}${f.notes&&f.notes.length>30?'...':''}</div>
+      <div style="margin-top:4px"><span class="file-card-badge">${meta.label}</span></div>
+    </div>
+    <div class="file-actions" onclick="event.stopPropagation()">
+      <button class="file-action-btn share-btn" onclick="shareFile('${f.id}')">📤</button>
+      <button class="file-action-btn del" onclick="deleteFile('${f.id}')">🗑️</button>
+    </div>
+  </div>`;
+}
+
+// ===== RENDER FILES =====
+function renderFiles(){
+  const search=document.getElementById('filesSearchInput').value.toLowerCase();
+  const catRow=document.getElementById('catFilterRow');
+  const allCats=[{id:'all',name:'All',emoji:'✨'},...state.categories];
+  catRow.innerHTML=allCats.map(c=>`<div class="cat-chip ${state.activeFilter===c.id?'active':''}" onclick="setFilter('${c.id}')">${c.emoji} ${c.name}</div>`).join('');
+  let files=state.files.filter(f=>{
+    const matchCat=state.activeFilter==='all'||f.type===state.activeFilter;
+    const matchSearch=!search||f.title.toLowerCase().includes(search)||(f.notes||'').toLowerCase().includes(search);
+    return matchCat&&matchSearch;
+  }).sort((a,b)=>b.createdAt-a.createdAt);
+  const list=document.getElementById('filesList');
+  if(files.length===0){
+    list.innerHTML=`<div class="empty-state"><div class="empty-icon">🔍</div><div class="empty-title">No files found</div><div class="empty-desc">Try a different category or search</div></div>`;
+  }else{
+    list.innerHTML=`<div class="recent-list">${files.map(f=>fileCardHTML(f)).join('')}</div>`;
+  }
+}
+function setFilter(id){state.activeFilter=id;renderFiles();}
+
+// ===== RENDER CATEGORIES =====
+function renderCategories(){
+  document.getElementById('catManageList').innerHTML=state.categories.map(c=>{
+    const count=state.files.filter(f=>f.type===c.id).length;
+    return `<div class="cat-manage-item">
+      <div class="cat-manage-emoji">${c.emoji}</div>
+      <div class="cat-manage-name">${escHtml(c.name)}</div>
+      <div class="cat-manage-count">${count} file${count!==1?'s':''}</div>
+      <button class="cat-del-btn ${c.builtIn?'cat-built-in':''}" onclick="deleteCategory('${c.id}')" ${c.builtIn?'disabled':''}>🗑️</button>
+    </div>`;
+  }).join('');
+}
+
+// ===== RENDER PROFILE =====
+function renderProfile(){
+  const p=state.profile;
+  document.getElementById('profileNameDisplay').textContent=p.name||'Student';
+  document.getElementById('profileEmailDisplay').textContent=p.email||p.institution||'Tap to edit your profile';
+  const dt=document.getElementById('darkToggle');
+  if(dt)dt.classList.toggle('on',state.dark);
+  checkNotifPermStatus();
+}
+
+// ===== FILE TYPES =====
+const FILE_TYPES=[
+  {id:'note',emoji:'📝',label:'Note'},{id:'photo',emoji:'🖼️',label:'Photo'},
+  {id:'video',emoji:'🎬',label:'Video'},{id:'pdf',emoji:'📄',label:'PDF'},
+  {id:'link',emoji:'🔗',label:'Link'},{id:'youtube',emoji:'▶️',label:'YouTube'},
+];
+function getTypeMeta(type){
+  const map={note:{emoji:'📝',label:'Note'},photo:{emoji:'🖼️',label:'Photo'},video:{emoji:'🎬',label:'Video'},pdf:{emoji:'📄',label:'PDF'},link:{emoji:'🔗',label:'Link'},youtube:{emoji:'▶️',label:'YouTube'}};
+  const cat=state.categories.find(c=>c.id===type);
+  if(cat)return{emoji:cat.emoji,label:cat.name};
+  return map[type]||{emoji:'📎',label:type};
+}
+
+// ===== ADD FILE =====
+function openAddFileSheet(){
+  state.addFileType='note';state.selectedFileData=null;state.selectedFileName='';state.selectedFileMime='';
+  const allTypes=[...FILE_TYPES,...state.categories.filter(c=>!c.builtIn).map(c=>({id:c.id,emoji:c.emoji,label:c.name}))];
+  document.getElementById('typeGrid').innerHTML=allTypes.map(t=>`<button class="type-btn ${t.id==='note'?'active':''}" onclick="selectType('${t.id}',this)"><span class="type-emoji">${t.emoji}</span>${t.label}</button>`).join('');
+  document.getElementById('fileTitle').value='';document.getElementById('fileNotes').value='';document.getElementById('fileInput').value='';
+  document.getElementById('thumbPreview').style.display='none';document.getElementById('thumbPreview').src='';
+  document.getElementById('uploadProgress').style.display='none';
+  const sel=document.getElementById('fileCategorySelect');
+  sel.innerHTML=state.categories.map(c=>`<option value="${c.id}">${c.emoji} ${c.name}</option>`).join('');
+  sel.value='note';updateTypeUI('note');
+  openModal('addFileModal');
+}
+
+function selectType(typeId,btn){
+  state.addFileType=typeId;
+  document.querySelectorAll('.type-btn').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  const sel=document.getElementById('fileCategorySelect');
+  if([...sel.options].some(o=>o.value===typeId))sel.value=typeId;
+  updateTypeUI(typeId);
+}
+
+function updateTypeUI(type){
+  const isLink=['link','youtube'].includes(type);
+  document.getElementById('fileUploadGroup').style.display=isLink?'none':'';
+  document.getElementById('linkInputGroup').style.display=isLink?'':'none';
+  if(document.getElementById('linkInput'))document.getElementById('linkInput').value='';
+  const fi=document.getElementById('fileInput');
+  if(type==='photo')fi.accept='image/*';
+  else if(type==='video')fi.accept='video/*';
+  else if(type==='pdf')fi.accept='application/pdf';
+  else fi.accept='*/*';
+}
+
+document.getElementById('fileInput').addEventListener('change',async(e)=>{
+  const file=e.target.files[0];if(!file)return;
+  state.selectedFileName=file.name;state.selectedFileMime=file.type;
+  if(!document.getElementById('fileTitle').value)document.getElementById('fileTitle').value=file.name.replace(/\.[^.]+$/,'');
+  document.getElementById('uploadProgress').style.display='block';
+  document.getElementById('progressFill').style.width='0%';
+  const reader=new FileReader();
+  reader.onprogress=(e)=>{if(e.lengthComputable)document.getElementById('progressFill').style.width=(e.loaded/e.total*80)+'%';};
+  reader.onload=async(ev)=>{
+    state.selectedFileData=ev.target.result;
+    document.getElementById('progressFill').style.width='100%';
+    setTimeout(()=>document.getElementById('uploadProgress').style.display='none',600);
+    if(file.type.startsWith('image/')){const t=document.getElementById('thumbPreview');t.src=ev.target.result;t.style.display='block';}
+  };
+  reader.readAsDataURL(file);
+});
+
+const fua=document.getElementById('fileUploadArea');
+fua.addEventListener('dragover',e=>{e.preventDefault();fua.classList.add('drag-over');});
+fua.addEventListener('dragleave',()=>fua.classList.remove('drag-over'));
+fua.addEventListener('drop',e=>{
+  e.preventDefault();fua.classList.remove('drag-over');
+  const file=e.dataTransfer.files[0];
+  if(file){const dt=new DataTransfer();dt.items.add(file);document.getElementById('fileInput').files=dt.files;document.getElementById('fileInput').dispatchEvent(new Event('change'));}
+});
+
+async function saveFile(){
+  const title=document.getElementById('fileTitle').value.trim();
+  const type=state.addFileType;
+  const notes=document.getElementById('fileNotes').value.trim();
+  const cat=document.getElementById('fileCategorySelect').value;
+  if(!title){toast('Please enter a title','error');return;}
+  const isLink=['link','youtube'].includes(type);
+  let url='';
+  if(isLink){url=document.getElementById('linkInput').value.trim();if(!url){toast('Please enter a URL','error');return;}}
+  const id='f_'+Date.now()+'_'+Math.random().toString(36).slice(2);
+  const fileObj={id,title,type:cat||type,notes,createdAt:Date.now(),size:0,hasBlob:false,url:'',mimeType:'',originalName:''};
+  if(isLink){fileObj.url=url;}
+  else if(state.selectedFileData){
+    try{
+      const blob=dataURItoBlob(state.selectedFileData);
+      await dbSaveBlob(id,blob);
+      fileObj.hasBlob=true;fileObj.size=blob.size;fileObj.mimeType=state.selectedFileMime;fileObj.originalName=state.selectedFileName;
+    }catch(e){toast('File too large for storage','error');return;}
+  }
+  state.files.push(fileObj);saveState();
+  closeModal('addFileModal');toast('File saved to vault! 🎉','success');
+  if(state.currentPage==='home')renderHome();
+  if(state.currentPage==='files')renderFiles();
+}
+
+function dataURItoBlob(dataURI){
+  const parts=dataURI.split(',');const mime=parts[0].match(/:(.*?);/)[1];
+  const bstr=atob(parts[1]);const u8arr=new Uint8Array(bstr.length);
+  for(let i=0;i<bstr.length;i++)u8arr[i]=bstr.charCodeAt(i);
+  return new Blob([u8arr],{type:mime});
+}
+
+// ===== VIEW FILE =====
+async function viewFile(id){
+  const f=state.files.find(x=>x.id===id);if(!f)return;
+  const meta=getTypeMeta(f.type);
+  const date=new Date(f.createdAt).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+  let mediaHTML='';
+  if(f.url){
+    if(f.type==='youtube'){
+      const vidId=extractYTId(f.url);
+      if(vidId){mediaHTML=`<div style="position:relative;padding-top:56.25%;border-radius:12px;overflow:hidden;margin-bottom:14px;"><iframe src="https://www.youtube.com/embed/${vidId}" style="position:absolute;inset:0;width:100%;height:100%;border:none;" allowfullscreen></iframe></div>`;}
+      else{mediaHTML=`<a href="${escHtml(f.url)}" target="_blank" style="display:block;background:var(--bg3);border-radius:10px;padding:12px 16px;margin-bottom:14px;color:var(--accent);word-break:break-all;">${escHtml(f.url)}</a>`;}
+    }else{
+      mediaHTML=`<a href="${escHtml(f.url)}" target="_blank" style="display:flex;align-items:center;gap:10px;background:var(--bg3);border-radius:10px;padding:12px 16px;margin-bottom:14px;color:var(--accent);"><span style="font-size:20px;">🔗</span><span style="word-break:break-all;font-size:13px;">${escHtml(f.url)}</span></a>`;
+    }
+  }else if(f.hasBlob){
+    const blob=await dbGetBlob(id);
+    if(blob){
+      const objUrl=URL.createObjectURL(blob);
+      if(f.mimeType.startsWith('image/'))mediaHTML=`<img src="${objUrl}" style="width:100%;border-radius:12px;margin-bottom:14px;max-height:260px;object-fit:cover;"/>`;
+      else if(f.mimeType.startsWith('video/'))mediaHTML=`<video src="${objUrl}" controls style="width:100%;border-radius:12px;margin-bottom:14px;max-height:260px;"/>`;
+      else if(f.mimeType==='application/pdf')mediaHTML=`<embed src="${objUrl}" type="application/pdf" style="width:100%;height:300px;border-radius:12px;margin-bottom:14px;"/>`;
+      else mediaHTML=`<div style="background:var(--bg3);border-radius:10px;padding:14px;margin-bottom:14px;text-align:center;"><div style="font-size:36px;margin-bottom:8px;">📎</div><div style="font-size:13px;color:var(--text2);">${escHtml(f.originalName||f.title)}</div><a href="${objUrl}" download="${escHtml(f.originalName||f.title)}" style="display:inline-block;margin-top:10px;padding:8px 18px;border-radius:8px;background:var(--accent);color:#fff;font-size:13px;text-decoration:none;">⬇️ Download</a></div>`;
+    }
+  }
+  document.getElementById('viewFileContent').innerHTML=`
+    <div class="sheet-handle"></div>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+      <div style="font-size:28px;">${meta.emoji}</div>
+      <div><div style="font-family:var(--font-head);font-size:18px;font-weight:800;">${escHtml(f.title)}</div><div style="font-size:12px;color:var(--text2);">${meta.label} · ${date}${f.size?' · '+formatSize(f.size):''}</div></div>
+    </div>
+    ${mediaHTML}
+    ${f.notes?`<div style="background:var(--bg3);border-radius:10px;padding:12px 14px;margin-bottom:14px;"><div style="font-size:11px;color:var(--text3);font-weight:600;text-transform:uppercase;margin-bottom:6px;">Notes</div><div style="font-size:14px;line-height:1.6;color:var(--text2);">${escHtml(f.notes)}</div></div>`:''}
+    <div class="share-export-row">
+      <button class="btn-secondary" onclick="shareFile('${f.id}')">📤 Share</button>
+      <button class="btn-secondary" onclick="deleteFile('${f.id}');closeModal('viewFileModal')" style="color:var(--red);border-color:rgba(247,111,114,0.4);">🗑️ Delete</button>
+    </div>
+    <button class="btn-secondary" onclick="closeModal('viewFileModal')">Close</button>`;
+  openModal('viewFileModal');
+}
+function extractYTId(url){const m=url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);return m?m[1]:null;}
+
+// ===== DELETE FILE =====
+async function deleteFile(id){
+  if(!confirm('Delete this file?'))return;
+  state.files=state.files.filter(f=>f.id!==id);
+  await dbDeleteBlob(id);saveState();
+  toast('File deleted','info');
+  if(state.currentPage==='home')renderHome();
+  if(state.currentPage==='files')renderFiles();
+}
+
+// ===== SHARE =====
+async function shareFile(id){
+  const f=state.files.find(x=>x.id===id);if(!f)return;
+  const meta=getTypeMeta(f.type);
+  let shareData={title:f.title,text:`${meta.emoji} ${f.title}\n${f.notes||''}\nShared from StudyVault`};
+  if(f.url)shareData.url=f.url;
+  if(f.hasBlob&&!f.url){
+    const blob=await dbGetBlob(id);
+    if(blob&&navigator.canShare&&navigator.canShare({files:[new File([blob],f.originalName||f.title,{type:f.mimeType})]})){
+      shareData.files=[new File([blob],f.originalName||f.title,{type:f.mimeType})];
+    }
+  }
+  if(navigator.share){try{await navigator.share(shareData);}catch(e){if(e.name!=='AbortError')toast('Could not share','error');}}
+  else{
+    if(f.url){await navigator.clipboard.writeText(f.url).catch(()=>{});toast('Link copied!','success');}
+    else if(f.hasBlob){const blob=await dbGetBlob(id);if(blob){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=f.originalName||f.title;a.click();toast('File downloaded!','success');}}
+  }
+}
+
+// ===== CATEGORIES =====
+function openAddCatSheet(){document.getElementById('catEmoji').value='';document.getElementById('catName').value='';openModal('addCatModal');}
+function saveCategory(){
+  const emoji=document.getElementById('catEmoji').value.trim()||'📁';
+  const name=document.getElementById('catName').value.trim();
+  if(!name){toast('Enter a category name','error');return;}
+  state.categories.push({id:'cat_'+Date.now(),name,emoji,builtIn:false});
+  saveState();closeModal('addCatModal');renderCategories();toast(`Category "${name}" added!`,'success');
+}
+function deleteCategory(id){
+  const cat=state.categories.find(c=>c.id===id);if(!cat||cat.builtIn)return;
+  const count=state.files.filter(f=>f.type===id).length;
+  if(!confirm(count>0?`Delete "${cat.name}"? It has ${count} file(s).`:`Delete "${cat.name}"?`))return;
+  state.categories=state.categories.filter(c=>c.id!==id);saveState();renderCategories();toast('Category deleted','info');
+}
+
+// ===== PROFILE =====
+function openEditProfile(){
+  const p=state.profile;
+  document.getElementById('editName').value=p.name||'';
+  document.getElementById('editEmail').value=p.email||'';
+  document.getElementById('editInstitution').value=p.institution||'';
+  openModal('editProfileModal');
+}
+function saveProfile(){
+  state.profile.name=document.getElementById('editName').value.trim()||'Student';
+  state.profile.email=document.getElementById('editEmail').value.trim();
+  state.profile.institution=document.getElementById('editInstitution').value.trim();
+  saveState();renderProfile();closeModal('editProfileModal');toast('Profile saved!','success');
+}
+document.getElementById('profileAvatarBtn').addEventListener('click',()=>document.getElementById('avatarFileInput').click());
+document.getElementById('avatarFileInput').addEventListener('change',(e)=>{
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=(ev)=>{state.profile.avatar=ev.target.result;saveState();updateAvatarUI();toast('Photo updated!','success');};
+  reader.readAsDataURL(file);
+});
+function updateAvatarUI(){
+  const img=document.getElementById('profileAvatarImg');const emoji=document.getElementById('profileAvatarEmoji');
+  if(state.profile.avatar){img.src=state.profile.avatar;img.style.display='block';emoji.style.display='none';}
+  else{img.style.display='none';emoji.style.display='';}
+}
+
+// ===== EXPORT / IMPORT =====
+async function exportAllFiles(){
+  toast('Preparing export...','info');
+  const exportData={version:'2.0',exportedAt:Date.now(),profile:state.profile,categories:state.categories,files:state.files,todos:state.todos,blobs:[]};
+  for(const f of state.files){
+    if(f.hasBlob){const blob=await dbGetBlob(f.id);if(blob){const b64=await blobToBase64(blob);exportData.blobs.push({id:f.id,data:b64,mimeType:f.mimeType});}}
+  }
+  const json=JSON.stringify(exportData);
+  const blob=new Blob([json],{type:'application/json'});
+  const fname=`StudyVault_backup_${Date.now()}.json`;
+  if(navigator.share){
+    try{await navigator.share({title:'StudyVault Backup',files:[new File([blob],fname,{type:'application/json'})]});}
+    catch(e){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=fname;a.click();}
+  }else{const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=fname;a.click();}
+  toast('Export ready!','success');
+}
+function blobToBase64(blob){return new Promise(res=>{const r=new FileReader();r.onload=()=>res(r.result);r.readAsDataURL(blob);});}
+function importFiles(){document.getElementById('importFileInput').click();}
+document.getElementById('importFileInput').addEventListener('change',async(e)=>{
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=async(ev)=>{
+    try{
+      const data=JSON.parse(ev.target.result);
+      if(!data.files||!data.categories)throw new Error('Invalid');
+      if(!confirm(`Import ${data.files.length} files, ${(data.todos||[]).length} tasks, ${data.categories.length} categories?`))return;
+      data.categories.forEach(c=>{if(!state.categories.find(x=>x.id===c.id))state.categories.push(c);});
+      const existingIds=new Set(state.files.map(f=>f.id));
+      for(const f of data.files){if(!existingIds.has(f.id)){state.files.push(f);const bd=(data.blobs||[]).find(b=>b.id===f.id);if(bd){await dbSaveBlob(f.id,dataURItoBlob(bd.data));}}}
+      const existingTodos=new Set(state.todos.map(t=>t.id));
+      (data.todos||[]).forEach(t=>{if(!existingTodos.has(t.id))state.todos.push(t);});
+      saveState();toast(`Imported ${data.files.length} files & ${(data.todos||[]).length} tasks!`,'success');
+      if(state.currentPage==='home')renderHome();
+      if(state.currentPage==='todo')renderTodo();
+    }catch(e){toast('Invalid backup file','error');}
+  };
+  reader.readAsText(file);
+});
+
+function clearAllData(){
+  if(!confirm('⚠️ Delete ALL data? Cannot be undone.'))return;
+  if(!confirm('Absolutely sure? All files and tasks will be lost.'))return;
+  state.files=[];state.todos=[];state.categories=[...BUILT_IN_CATS];state.profile={name:'Student',email:'',institution:''};
+  const tx=db.transaction('blobs','readwrite');tx.objectStore('blobs').clear();
+  saveState();renderHome();toast('All data cleared','info');
+}
+
+// ===== SEARCH =====
+document.getElementById('searchToggleBtn').addEventListener('click',()=>{
+  const sb=document.getElementById('searchBarHome');const shown=sb.style.display!=='none';
+  sb.style.display=shown?'none':'block';if(!shown)document.getElementById('homeSearchInput').focus();
+});
+document.getElementById('homeSearchInput').addEventListener('input',(e)=>{
+  const q=e.target.value.toLowerCase();
+  if(!q){renderHome();return;}
+  const filtered=state.files.filter(f=>f.title.toLowerCase().includes(q)||(f.notes||'').toLowerCase().includes(q));
+  const list=document.getElementById('recentList');
+  list.innerHTML=filtered.length===0?`<div class="empty-state"><div class="empty-icon">🔍</div><div class="empty-title">No results</div></div>`:filtered.slice(0,10).map(f=>fileCardHTML(f)).join('');
+});
+document.getElementById('filesSearchInput').addEventListener('input',()=>renderFiles());
+
+// ===== MODAL UTILS =====
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+function closeOnBackdrop(e,id){if(e.target===document.getElementById(id))closeModal(id);}
+
+// ===== TOAST =====
+function toast(msg,type='info'){
+  const icons={success:'✅',error:'❌',info:'ℹ️'};
+  const tc=document.getElementById('toastContainer');
+  const el=document.createElement('div');el.className=`toast ${type}`;el.innerHTML=`${icons[type]} ${msg}`;tc.appendChild(el);
+  setTimeout(()=>{el.style.animation='toastOut 0.3s ease forwards';setTimeout(()=>el.remove(),300);},2800);
+}
+function escHtml(str){return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function formatSize(bytes){if(!bytes)return'0 B';if(bytes<1024)return bytes+' B';if(bytes<1048576)return(bytes/1024).toFixed(1)+' KB';return(bytes/1048576).toFixed(1)+' MB';}
+
+// ===== INIT =====
+async function init(){
+  await initDB();
+  loadState();
+  applyDark();
+  updateAvatarUI();
+  updateTodoBadge();
+  checkNotifPermStatus();
+  renderHome();
+  startNotifChecker();
+  if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+}
+init();
+</script>
+</body>
+</html>
