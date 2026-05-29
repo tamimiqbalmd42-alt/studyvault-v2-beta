@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+  <defs>
+    <linearGradient id="vaultGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4F46E5"/>
+      <stop offset="100%" style="stop-color:#7C3AED"/>
+    </linearGradient>
+    <linearGradient id="shineGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.18"/>
+      <stop offset="100%" style="stop-color:#ffffff;stop-opacity:0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Rounded square base -->
+  <rect x="10" y="10" width="180" height="180" rx="38" ry="38" fill="url(#vaultGrad)"/>
+  <!-- Shine overlay -->
+  <rect x="10" y="10" width="180" height="90" rx="38" ry="38" fill="url(#shineGrad)"/>
+
+  <!-- Vault door outer ring -->
+  <circle cx="100" cy="95" r="62" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="5"/>
+
+  <!-- Vault door inner circle -->
+  <circle cx="100" cy="95" r="50" fill="rgba(0,0,0,0.2)"/>
+
+  <!-- Vault spokes -->
+  <line x1="100" y1="45" x2="100" y2="145" stroke="rgba(255,255,255,0.35)" stroke-width="3.5" stroke-linecap="round"/>
+  <line x1="50" y1="95" x2="150" y2="95" stroke="rgba(255,255,255,0.35)" stroke-width="3.5" stroke-linecap="round"/>
+  <line x1="65" y1="60" x2="135" y2="130" stroke="rgba(255,255,255,0.2)" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="135" y1="60" x2="65" y2="130" stroke="rgba(255,255,255,0.2)" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Spoke end bolts -->
+  <circle cx="100" cy="47" r="5" fill="rgba(255,255,255,0.6)"/>
+  <circle cx="100" cy="143" r="5" fill="rgba(255,255,255,0.6)"/>
+  <circle cx="52" cy="95" r="5" fill="rgba(255,255,255,0.6)"/>
+  <circle cx="148" cy="95" r="5" fill="rgba(255,255,255,0.6)"/>
+
+  <!-- Center lock -->
+  <circle cx="100" cy="95" r="20" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.5)" stroke-width="2"/>
+
+  <!-- Book icon in center -->
+  <!-- Left page -->
+  <rect x="87" y="84" width="11" height="18" rx="2" fill="white" opacity="0.9"/>
+  <!-- Right page -->
+  <rect x="101" y="84" width="11" height="18" rx="2" fill="white" opacity="0.7"/>
+  <!-- Spine -->
+  <rect x="98" y="83" width="3" height="20" rx="1" fill="#7C3AED"/>
+
+  <!-- Handle on right side of vault -->
+  <rect x="155" y="88" width="14" height="14" rx="7" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="3"/>
+
+  <!-- App name below -->
+  <text x="100" y="177" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="15" font-weight="700" fill="white" text-anchor="middle" letter-spacing="1.5" opacity="0.95">STUDYVAULT</text>
+</svg>
