@@ -21,20 +21,31 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 #app::after{content:'';position:fixed;bottom:-80px;right:20px;width:200px;height:200px;background:radial-gradient(circle,rgba(124,111,247,0.13) 0%,transparent 70%);pointer-events:none;z-index:0;}
 header{position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:18px 20px 14px;background:var(--bg);border-bottom:1px solid var(--border);}
 .logo{display:flex;align-items:center;gap:10px;}
-.logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 0 18px rgba(79,142,247,0.35);}
+.logo-icon{width:38px;height:38px;flex-shrink:0;}
 .logo-text{font-family:var(--font-head);font-size:20px;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.header-actions{display:flex;gap:8px;}
-.icon-btn{width:38px;height:38px;border-radius:var(--radius-sm);background:var(--bg3);border:1px solid var(--border);color:var(--text2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:17px;transition:all var(--transition);position:relative;}
+.header-actions{display:flex;gap:8px;align-items:center;}
+.icon-btn{width:38px;height:38px;border-radius:var(--radius-sm);background:var(--bg3);border:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all var(--transition);position:relative;padding:0;}
+.icon-btn svg{width:20px;height:20px;stroke:var(--text2);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
 .icon-btn:active{transform:scale(0.93);}
-.icon-btn.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+.icon-btn.active{background:var(--accent);border-color:var(--accent);}
+.icon-btn.active svg{stroke:#fff;}
+.profile-icon-btn{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));border:2px solid var(--accent);cursor:pointer;display:flex;align-items:center;justify-content:center;overflow:hidden;transition:all var(--transition);flex-shrink:0;}
+.profile-icon-btn svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.profile-icon-btn img{width:100%;height:100%;object-fit:cover;border-radius:50%;display:none;}
+.profile-icon-btn:active{transform:scale(0.93);}
 .notif-dot{position:absolute;top:6px;right:6px;width:8px;height:8px;background:var(--red);border-radius:50%;border:2px solid var(--bg);}
-nav{position:relative;z-index:10;display:flex;background:var(--bg2);border-top:1px solid var(--border);padding:6px 0 env(safe-area-inset-bottom,6px);}
-.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 4px;cursor:pointer;border:none;background:transparent;color:var(--text3);font-family:var(--font-body);font-size:10px;font-weight:500;transition:color var(--transition);position:relative;}
-.nav-btn .nav-icon{font-size:20px;transition:transform var(--transition);}
+nav{position:relative;z-index:10;display:flex;align-items:center;background:var(--bg2);border-top:1px solid var(--border);padding:0 0 env(safe-area-inset-bottom,0px);}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 4px 8px;cursor:pointer;border:none;background:transparent;color:var(--text3);font-family:var(--font-body);font-size:10px;font-weight:500;transition:color var(--transition);position:relative;}
+.nav-btn svg{width:22px;height:22px;stroke:var(--text3);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transition:transform var(--transition);}
 .nav-btn.active{color:var(--accent);}
-.nav-btn.active .nav-icon{transform:translateY(-2px);}
-.nav-btn.active::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:40px;height:2px;background:var(--accent);border-radius:0 0 3px 3px;}
-.nav-badge{position:absolute;top:4px;right:50%;transform:translateX(14px);background:var(--red);color:#fff;font-size:9px;font-weight:700;padding:1px 5px;border-radius:10px;min-width:16px;text-align:center;}
+.nav-btn.active svg{stroke:var(--accent);transform:translateY(-2px);}
+.nav-btn.active::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:36px;height:2px;background:var(--accent);border-radius:0 0 3px 3px;}
+.nav-fab-slot{flex:1;display:flex;justify-content:center;align-items:center;padding:6px 0;}
+.nav-fab{width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(79,142,247,0.45);transition:transform var(--transition);margin-top:-14px;}
+.nav-fab svg{width:24px;height:24px;stroke:#fff;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;}
+.nav-fab:active{transform:scale(0.92);}
+.nav-fab.hidden{opacity:0.35;pointer-events:none;}
+.nav-badge{position:absolute;top:6px;right:50%;transform:translateX(14px);background:var(--red);color:#fff;font-size:9px;font-weight:700;padding:1px 5px;border-radius:10px;min-width:16px;text-align:center;}
 #pages{flex:1;overflow:hidden;position:relative;z-index:1;}
 .page{position:absolute;inset:0;overflow-y:auto;padding:16px 16px 100px;display:none;animation:pageIn 0.3s ease;}
 .page.active{display:block;}
@@ -94,9 +105,7 @@ nav{position:relative;z-index:10;display:flex;background:var(--bg2);border-top:1
 .cat-del-btn{width:30px;height:30px;border-radius:8px;background:rgba(247,111,114,0.1);border:1px solid rgba(247,111,114,0.25);color:var(--red);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all var(--transition);}
 .cat-del-btn:active{transform:scale(0.9);background:rgba(247,111,114,0.2);}
 .cat-built-in{opacity:0.5;pointer-events:none;}
-.fab{position:fixed;bottom:80px;right:20px;width:56px;height:56px;border-radius:18px;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;color:#fff;font-size:26px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 24px rgba(79,142,247,0.45);z-index:20;transition:transform var(--transition);}
-.fab:active{transform:scale(0.93);}
-.fab.hidden{display:none;}
+/* fab moved to nav */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:30;display:none;align-items:flex-end;animation:fadeIn 0.2s ease;}
 .modal-overlay.open{display:flex;}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
@@ -180,7 +189,7 @@ input[type=file]{display:none;}
 .thumb-preview{width:100%;max-height:120px;object-fit:cover;border-radius:var(--radius-sm);margin-bottom:10px;display:none;}
 .progress-bar{height:4px;background:var(--bg3);border-radius:4px;overflow:hidden;margin-top:6px;}
 .progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0%;transition:width 0.3s ease;border-radius:4px;}
-
+ 
 /* ===== STORAGE BANNER ===== */
 .storage-banner{background:linear-gradient(135deg,rgba(79,142,247,0.15),rgba(124,111,247,0.15));border:1px solid var(--accent);border-radius:var(--radius);padding:14px 16px;margin-bottom:18px;display:flex;align-items:center;gap:12px;cursor:pointer;}
 .storage-banner-icon{font-size:24px;}
@@ -189,7 +198,7 @@ input[type=file]{display:none;}
 .storage-banner-sub{font-size:12px;color:var(--text2);margin-top:2px;}
 .storage-bar{height:6px;background:var(--bg3);border-radius:6px;overflow:hidden;margin-top:8px;}
 .storage-bar-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--green),var(--accent));transition:width 0.5s ease;}
-
+ 
 /* ===== TODO PAGE ===== */
 .todo-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
 .todo-tabs{display:flex;gap:6px;margin-bottom:16px;}
@@ -257,15 +266,47 @@ input[type=file]{display:none;}
 <div id="app">
   <header>
     <div class="logo">
-      <div class="logo-icon">📚</div>
+      <!-- SVG Logo -->
+      <svg class="logo-icon" viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="lgA" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#4f8ef7"/>
+            <stop offset="100%" stop-color="#7c6ff7"/>
+          </linearGradient>
+        </defs>
+        <rect width="38" height="38" rx="10" fill="url(#lgA)"/>
+        <!-- Book body -->
+        <rect x="8" y="9" width="14" height="20" rx="2" fill="white" opacity="0.95"/>
+        <rect x="9" y="9" width="2" height="20" fill="#c8d8ff" rx="1"/>
+        <!-- Lines on book -->
+        <line x1="13" y1="14" x2="20" y2="14" stroke="#4f8ef7" stroke-width="1.2" stroke-linecap="round"/>
+        <line x1="13" y1="17" x2="20" y2="17" stroke="#4f8ef7" stroke-width="1.2" stroke-linecap="round"/>
+        <line x1="13" y1="20" x2="18" y2="20" stroke="#4f8ef7" stroke-width="1.2" stroke-linecap="round"/>
+        <!-- Vault lock circle -->
+        <circle cx="27" cy="24" r="7" fill="white" opacity="0.15"/>
+        <circle cx="27" cy="24" r="5" fill="none" stroke="white" stroke-width="1.5" opacity="0.9"/>
+        <circle cx="27" cy="24" r="2" fill="white" opacity="0.9"/>
+        <line x1="27" y1="19" x2="27" y2="16" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+      </svg>
       <div class="logo-text">StudyVault</div>
     </div>
     <div class="header-actions">
-      <button class="icon-btn" id="searchToggleBtn" title="Search">🔍</button>
-      <button class="icon-btn" id="darkModeBtn" title="Dark/Light Mode">🌙</button>
+      <!-- Search icon -->
+      <button class="icon-btn" id="searchToggleBtn" title="Search">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>
+      </button>
+      <!-- Dark mode icon -->
+      <button class="icon-btn" id="darkModeBtn" title="Dark/Light Mode">
+        <svg id="darkIconSvg" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/></svg>
+      </button>
+      <!-- Profile icon top right -->
+      <button class="profile-icon-btn" id="headerProfileBtn" onclick="navigateTo('profile')" title="Profile">
+        <svg id="headerProfileSvg" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <img id="headerProfileImg" src="" alt=""/>
+      </button>
     </div>
   </header>
-
+ 
   <div id="pages">
     <!-- HOME -->
     <div class="page active" id="page-home">
@@ -292,14 +333,14 @@ input[type=file]{display:none;}
       <div class="section-title">Recent Files <span onclick="navigateTo('files')">See all →</span></div>
       <div class="recent-list" id="recentList"></div>
     </div>
-
+ 
     <!-- FILES -->
     <div class="page" id="page-files">
       <div class="search-bar"><span class="search-icon">🔍</span><input class="search-input" id="filesSearchInput" placeholder="Search files..." autocomplete="off"/></div>
       <div class="cat-scroll" id="catFilterRow"></div>
       <div id="filesList"></div>
     </div>
-
+ 
     <!-- TODO -->
     <div class="page" id="page-todo">
       <div class="todo-header">
@@ -327,7 +368,7 @@ input[type=file]{display:none;}
       </div>
       <div class="todo-list" id="todoList"></div>
     </div>
-
+ 
     <!-- CATEGORIES -->
     <div class="page" id="page-categories">
       <div class="section-title" style="margin-bottom:6px;">My Categories</div>
@@ -335,7 +376,7 @@ input[type=file]{display:none;}
       <div class="cat-manage-list" id="catManageList"></div>
       <button class="btn-primary" onclick="openAddCatSheet()">+ Add New Category</button>
     </div>
-
+ 
     <!-- PROFILE -->
     <div class="page" id="page-profile">
       <div class="profile-hero">
@@ -396,7 +437,7 @@ input[type=file]{display:none;}
         </div>
       </div>
     </div>
-
+ 
     <!-- ABOUT -->
     <div class="page" id="page-about">
       <div class="about-hero">
@@ -417,19 +458,34 @@ input[type=file]{display:none;}
       </div>
     </div>
   </div>
-
+ 
   <nav>
-    <button class="nav-btn active" data-page="home" onclick="navigateTo('home')"><span class="nav-icon">🏠</span>Home</button>
-    <button class="nav-btn" data-page="files" onclick="navigateTo('files')"><span class="nav-icon">📁</span>Files</button>
-    <button class="nav-btn" data-page="todo" onclick="navigateTo('todo')"><span class="nav-icon">✅</span>Tasks<span class="nav-badge" id="todoBadge" style="display:none">0</span></button>
-    <button class="nav-btn" data-page="categories" onclick="navigateTo('categories')"><span class="nav-icon">🗂️</span>Categories</button>
-    <button class="nav-btn" data-page="profile" onclick="navigateTo('profile')"><span class="nav-icon">👤</span>Profile</button>
+    <button class="nav-btn active" data-page="home" onclick="navigateTo('home')">
+      <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9.5z"/><polyline points="9 21 9 12 15 12 15 21"/></svg>
+      Home
+    </button>
+    <button class="nav-btn" data-page="files" onclick="navigateTo('files')">
+      <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+      Files
+    </button>
+    <!-- Centre FAB slot -->
+    <div class="nav-fab-slot">
+      <button class="nav-fab" id="fabBtn" onclick="onFab()">
+        <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      </button>
+    </div>
+    <button class="nav-btn" data-page="todo" onclick="navigateTo('todo')">
+      <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><polyline points="9 9 11 11 15 7"/><line x1="9" y1="14" x2="15" y2="14"/></svg>
+      Tasks<span class="nav-badge" id="todoBadge" style="display:none">0</span>
+    </button>
+    <button class="nav-btn" data-page="categories" onclick="navigateTo('categories')">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Categories
+    </button>
   </nav>
-
-  <button class="fab" id="fabBtn" onclick="onFab()">+</button>
   <div class="toast-container" id="toastContainer"></div>
 </div>
-
+ 
 <!-- MODALS -->
 <!-- Add File -->
 <div class="modal-overlay" id="addFileModal" onclick="closeOnBackdrop(event,'addFileModal')">
@@ -454,7 +510,7 @@ input[type=file]{display:none;}
     <button class="btn-secondary" onclick="closeModal('addFileModal')">Cancel</button>
   </div>
 </div>
-
+ 
 <!-- Add Todo -->
 <div class="modal-overlay" id="addTodoModal" onclick="closeOnBackdrop(event,'addTodoModal')">
   <div class="bottom-sheet">
@@ -481,7 +537,7 @@ input[type=file]{display:none;}
     <button class="btn-secondary" onclick="closeModal('addTodoModal')">Cancel</button>
   </div>
 </div>
-
+ 
 <!-- Add Category -->
 <div class="modal-overlay" id="addCatModal" onclick="closeOnBackdrop(event,'addCatModal')">
   <div class="bottom-sheet">
@@ -493,7 +549,7 @@ input[type=file]{display:none;}
     <button class="btn-secondary" onclick="closeModal('addCatModal')">Cancel</button>
   </div>
 </div>
-
+ 
 <!-- Edit Profile -->
 <div class="modal-overlay" id="editProfileModal" onclick="closeOnBackdrop(event,'editProfileModal')">
   <div class="bottom-sheet">
@@ -506,12 +562,12 @@ input[type=file]{display:none;}
     <button class="btn-secondary" onclick="closeModal('editProfileModal')">Cancel</button>
   </div>
 </div>
-
+ 
 <!-- View File -->
 <div class="modal-overlay" id="viewFileModal" onclick="closeOnBackdrop(event,'viewFileModal')">
   <div class="bottom-sheet" id="viewFileContent"><div class="sheet-handle"></div></div>
 </div>
-
+ 
 <script>
 // ============================================================
 // STUDYVAULT v2.0 — Full App Logic
@@ -534,7 +590,7 @@ const BUILT_IN_CATS=[
   {id:'youtube',name:'YouTube',emoji:'▶️',builtIn:true},
   {id:'pdf',name:'PDFs',emoji:'📄',builtIn:true},
 ];
-
+ 
 // ===== INDEXEDDB =====
 function initDB(){
   return new Promise((res,rej)=>{
@@ -551,7 +607,7 @@ function initDB(){
 function dbSaveBlob(id,blob){return new Promise((res,rej)=>{const tx=db.transaction('blobs','readwrite');tx.objectStore('blobs').put({id,blob});tx.oncomplete=res;tx.onerror=rej;});}
 function dbGetBlob(id){return new Promise(res=>{const tx=db.transaction('blobs','readonly');const req=tx.objectStore('blobs').get(id);req.onsuccess=()=>res(req.result?req.result.blob:null);req.onerror=()=>res(null);});}
 function dbDeleteBlob(id){return new Promise(res=>{const tx=db.transaction('blobs','readwrite');tx.objectStore('blobs').delete(id);tx.oncomplete=res;tx.onerror=res;});}
-
+ 
 // ===== LOCALSTORAGE =====
 function saveState(){const s={...state};delete s.selectedFileData;localStorage.setItem('studyvault_state',JSON.stringify(s));}
 function loadState(){
@@ -571,7 +627,7 @@ function loadState(){
     if(!state.todos)state.todos=[];
   }catch(e){state.categories=[...BUILT_IN_CATS];}
 }
-
+ 
 // ===== NAVIGATION =====
 function navigateTo(page){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
@@ -592,7 +648,7 @@ function onFab(){
   if(state.currentPage==='todo')openAddTodoSheet();
   else openAddFileSheet();
 }
-
+ 
 // ===== DARK MODE =====
 function applyDark(){
   document.body.classList.toggle('light-mode',!state.dark);
@@ -601,7 +657,7 @@ function applyDark(){
   if(dt)dt.classList.toggle('on',state.dark);
 }
 function toggleDark(){state.dark=!state.dark;applyDark();saveState();}
-
+ 
 // ===== STORAGE PERMISSION =====
 async function requestStoragePermission(){
   // First check if already persisted
@@ -627,7 +683,7 @@ async function requestStoragePermission(){
   }
   updateStorageUI();
 }
-
+ 
 function showStorageGuide(){
   // Show an in-app modal with exact steps instead of just an error
   const overlay=document.createElement('div');
@@ -655,7 +711,7 @@ function showStorageGuide(){
   document.body.appendChild(overlay);
   overlay.addEventListener('click',e=>{if(e.target===overlay)overlay.remove();});
 }
-
+ 
 async function updateStorageUI(){
   if(navigator.storage&&navigator.storage.estimate){
     try{
@@ -680,7 +736,7 @@ async function updateStorageUI(){
     }catch(e){}
   }
 }
-
+ 
 // ===== NOTIFICATIONS =====
 async function requestNotifPermission(){
   if(!('Notification' in window)){
@@ -710,7 +766,7 @@ async function requestNotifPermission(){
     toast('Please tap "Allow" when the popup appears','info');
   }
 }
-
+ 
 function showNotifGuide(reason){
   const overlay=document.createElement('div');
   overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:50;display:flex;align-items:flex-end;';
@@ -740,7 +796,7 @@ function showNotifGuide(reason){
   document.body.appendChild(overlay);
   overlay.addEventListener('click',e=>{if(e.target===overlay)overlay.remove();});
 }
-
+ 
 function updateNotifUI(){
   if(!('Notification' in window))return;
   const perm=Notification.permission;
@@ -758,9 +814,9 @@ function updateNotifUI(){
     if(notifText)notifText.textContent='Tap to enable task reminders';
   }
 }
-
+ 
 function checkNotifPermStatus(){updateNotifUI();}
-
+ 
 function sendNotification(title,body,tag){
   if(!('Notification' in window)||Notification.permission!=='granted')return;
   try{
@@ -774,7 +830,7 @@ function sendNotification(title,body,tag){
     }
   }catch(e){}
 }
-
+ 
 function scheduleAllNotifications(){
   if(!state.notifGranted||Notification.permission!=='granted')return;
   const now=Date.now();
@@ -795,7 +851,7 @@ function scheduleAllNotifications(){
   // Keep only last 50 to avoid memory bloat
   sessionStorage.setItem('sv_notif_shown',JSON.stringify(newShown.slice(-50)));
 }
-
+ 
 // Run notification check every 30 minutes
 function startNotifChecker(){
   setInterval(()=>{
@@ -809,7 +865,7 @@ function startNotifChecker(){
     }
   });
 }
-
+ 
 // ===== TODO LOGIC =====
 function openAddTodoSheet(editId){
   state.editingTodoId=editId||null;
@@ -840,14 +896,14 @@ function openAddTodoSheet(editId){
   }
   openModal('addTodoModal');
 }
-
+ 
 function selectPrio(p,btn){
   state.todoPriority=p;
   document.querySelectorAll('.prio-btn').forEach(b=>{b.className='prio-btn';});
   const active=btn||document.querySelector(`.prio-btn:nth-child(${p==='high'?1:p==='medium'?2:3})`);
   if(active)active.className=`prio-btn active-${p}`;
 }
-
+ 
 function addPendingSubtask(){
   const val=document.getElementById('subtaskInput').value.trim();
   if(!val)return;
@@ -855,7 +911,7 @@ function addPendingSubtask(){
   document.getElementById('subtaskInput').value='';
   renderPendingSubtasks();
 }
-
+ 
 function renderPendingSubtasks(){
   document.getElementById('pendingSubtasks').innerHTML=state.pendingSubtasks.map((s,i)=>`
     <div class="pending-subtask-item">
@@ -863,14 +919,14 @@ function renderPendingSubtasks(){
       <button class="remove-sub-btn" onclick="removePendingSubtask(${i})">✕</button>
     </div>`).join('');
 }
-
+ 
 function removePendingSubtask(i){
   state.pendingSubtasks.splice(i,1);
   renderPendingSubtasks();
 }
-
+ 
 document.getElementById('subtaskInput').addEventListener('keydown',(e)=>{if(e.key==='Enter'){e.preventDefault();addPendingSubtask();}});
-
+ 
 function saveTodo(){
   const title=document.getElementById('todoTitle').value.trim();
   if(!title){toast('Enter a task title','error');return;}
@@ -906,7 +962,7 @@ function saveTodo(){
     }
   }
 }
-
+ 
 function toggleTodoDone(id){
   const t=state.todos.find(x=>x.id===id);
   if(!t)return;
@@ -917,7 +973,7 @@ function toggleTodoDone(id){
   if(state.currentPage==='home')renderHome();
   if(t.done)toast('Task completed! 🎉','success');
 }
-
+ 
 function toggleSubtask(todoId,subIdx){
   const t=state.todos.find(x=>x.id===todoId);
   if(!t||!t.subtasks)return;
@@ -928,7 +984,7 @@ function toggleSubtask(todoId,subIdx){
   if(state.currentPage==='todo')renderTodo();
   if(state.currentPage==='home')renderHome();
 }
-
+ 
 function deleteTodo(id){
   if(!confirm('Delete this task?'))return;
   state.todos=state.todos.filter(x=>x.id!==id);
@@ -938,21 +994,21 @@ function deleteTodo(id){
   if(state.currentPage==='home')renderHome();
   toast('Task deleted','info');
 }
-
+ 
 function setTodoTab(filter,el){
   state.todoFilter=filter;
   document.querySelectorAll('.todo-tab').forEach(t=>t.classList.remove('active'));
   if(el)el.classList.add('active');
   renderTodo();
 }
-
+ 
 function updateTodoBadge(){
   const pending=state.todos.filter(t=>!t.done).length;
   const badge=document.getElementById('todoBadge');
   if(pending>0){badge.textContent=pending>99?'99+':pending;badge.style.display='block';}
   else{badge.style.display='none';}
 }
-
+ 
 function todoDueLabel(ts){
   if(!ts)return null;
   const now=new Date();const due=new Date(ts);
@@ -966,7 +1022,7 @@ function todoDueLabel(ts){
   if(isTmr)return{label:'Tomorrow · '+timeStr,cls:''};
   return{label:due.toLocaleDateString('en-GB',{day:'2-digit',month:'short'})+' · '+timeStr,cls:''};
 }
-
+ 
 function todoCardHTML(t){
   const due=todoDueLabel(t.dueDate);
   const prioClass=`priority-${t.priority||'medium'}`;
@@ -1000,7 +1056,7 @@ function todoCardHTML(t){
     </div>
   </div>`;
 }
-
+ 
 function renderTodo(){
   checkNotifPermStatus();
   const todos=state.todos;
@@ -1032,7 +1088,7 @@ function renderTodo(){
     list.innerHTML=filtered.map(todoCardHTML).join('');
   }
 }
-
+ 
 // ===== RENDER HOME =====
 function renderHome(){
   updateGreeting();
@@ -1071,14 +1127,14 @@ function renderHome(){
     list.innerHTML=recent.map(f=>fileCardHTML(f)).join('');
   }
 }
-
+ 
 function updateGreeting(){
   const h=new Date().getHours();
   const g=h<12?'Good morning':h<17?'Good afternoon':'Good evening';
   document.getElementById('greetingText').textContent=g+' 👋';
   document.getElementById('greetingName').textContent='Welcome back, '+(state.profile.name||'Student');
 }
-
+ 
 // ===== FILE CARD =====
 function fileCardHTML(f){
   const meta=getTypeMeta(f.type);
@@ -1097,7 +1153,7 @@ function fileCardHTML(f){
     </div>
   </div>`;
 }
-
+ 
 // ===== RENDER FILES =====
 function renderFiles(){
   const search=document.getElementById('filesSearchInput').value.toLowerCase();
@@ -1117,7 +1173,7 @@ function renderFiles(){
   }
 }
 function setFilter(id){state.activeFilter=id;renderFiles();}
-
+ 
 // ===== RENDER CATEGORIES =====
 function renderCategories(){
   document.getElementById('catManageList').innerHTML=state.categories.map(c=>{
@@ -1130,7 +1186,7 @@ function renderCategories(){
     </div>`;
   }).join('');
 }
-
+ 
 // ===== RENDER PROFILE =====
 function renderProfile(){
   const p=state.profile;
@@ -1140,7 +1196,7 @@ function renderProfile(){
   if(dt)dt.classList.toggle('on',state.dark);
   checkNotifPermStatus();
 }
-
+ 
 // ===== FILE TYPES =====
 const FILE_TYPES=[
   {id:'note',emoji:'📝',label:'Note'},{id:'photo',emoji:'🖼️',label:'Photo'},
@@ -1153,7 +1209,7 @@ function getTypeMeta(type){
   if(cat)return{emoji:cat.emoji,label:cat.name};
   return map[type]||{emoji:'📎',label:type};
 }
-
+ 
 // ===== ADD FILE =====
 function openAddFileSheet(){
   state.addFileType='note';state.selectedFileData=null;state.selectedFileName='';state.selectedFileMime='';
@@ -1167,7 +1223,7 @@ function openAddFileSheet(){
   sel.value='note';updateTypeUI('note');
   openModal('addFileModal');
 }
-
+ 
 function selectType(typeId,btn){
   state.addFileType=typeId;
   document.querySelectorAll('.type-btn').forEach(b=>b.classList.remove('active'));
@@ -1176,7 +1232,7 @@ function selectType(typeId,btn){
   if([...sel.options].some(o=>o.value===typeId))sel.value=typeId;
   updateTypeUI(typeId);
 }
-
+ 
 function updateTypeUI(type){
   const isLink=['link','youtube'].includes(type);
   document.getElementById('fileUploadGroup').style.display=isLink?'none':'';
@@ -1188,7 +1244,7 @@ function updateTypeUI(type){
   else if(type==='pdf')fi.accept='application/pdf';
   else fi.accept='*/*';
 }
-
+ 
 document.getElementById('fileInput').addEventListener('change',async(e)=>{
   const file=e.target.files[0];if(!file)return;
   state.selectedFileName=file.name;state.selectedFileMime=file.type;
@@ -1205,7 +1261,7 @@ document.getElementById('fileInput').addEventListener('change',async(e)=>{
   };
   reader.readAsDataURL(file);
 });
-
+ 
 const fua=document.getElementById('fileUploadArea');
 fua.addEventListener('dragover',e=>{e.preventDefault();fua.classList.add('drag-over');});
 fua.addEventListener('dragleave',()=>fua.classList.remove('drag-over'));
@@ -1214,7 +1270,7 @@ fua.addEventListener('drop',e=>{
   const file=e.dataTransfer.files[0];
   if(file){const dt=new DataTransfer();dt.items.add(file);document.getElementById('fileInput').files=dt.files;document.getElementById('fileInput').dispatchEvent(new Event('change'));}
 });
-
+ 
 async function saveFile(){
   const title=document.getElementById('fileTitle').value.trim();
   const type=state.addFileType;
@@ -1239,14 +1295,14 @@ async function saveFile(){
   if(state.currentPage==='home')renderHome();
   if(state.currentPage==='files')renderFiles();
 }
-
+ 
 function dataURItoBlob(dataURI){
   const parts=dataURI.split(',');const mime=parts[0].match(/:(.*?);/)[1];
   const bstr=atob(parts[1]);const u8arr=new Uint8Array(bstr.length);
   for(let i=0;i<bstr.length;i++)u8arr[i]=bstr.charCodeAt(i);
   return new Blob([u8arr],{type:mime});
 }
-
+ 
 // ===== VIEW FILE =====
 async function viewFile(id){
   const f=state.files.find(x=>x.id===id);if(!f)return;
@@ -1287,7 +1343,7 @@ async function viewFile(id){
   openModal('viewFileModal');
 }
 function extractYTId(url){const m=url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);return m?m[1]:null;}
-
+ 
 // ===== DELETE FILE =====
 async function deleteFile(id){
   if(!confirm('Delete this file?'))return;
@@ -1297,7 +1353,7 @@ async function deleteFile(id){
   if(state.currentPage==='home')renderHome();
   if(state.currentPage==='files')renderFiles();
 }
-
+ 
 // ===== SHARE =====
 async function shareFile(id){
   const f=state.files.find(x=>x.id===id);if(!f)return;
@@ -1316,7 +1372,7 @@ async function shareFile(id){
     else if(f.hasBlob){const blob=await dbGetBlob(id);if(blob){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=f.originalName||f.title;a.click();toast('File downloaded!','success');}}
   }
 }
-
+ 
 // ===== CATEGORIES =====
 function openAddCatSheet(){document.getElementById('catEmoji').value='';document.getElementById('catName').value='';openModal('addCatModal');}
 function saveCategory(){
@@ -1332,7 +1388,7 @@ function deleteCategory(id){
   if(!confirm(count>0?`Delete "${cat.name}"? It has ${count} file(s).`:`Delete "${cat.name}"?`))return;
   state.categories=state.categories.filter(c=>c.id!==id);saveState();renderCategories();toast('Category deleted','info');
 }
-
+ 
 // ===== PROFILE =====
 function openEditProfile(){
   const p=state.profile;
@@ -1359,7 +1415,7 @@ function updateAvatarUI(){
   if(state.profile.avatar){img.src=state.profile.avatar;img.style.display='block';emoji.style.display='none';}
   else{img.style.display='none';emoji.style.display='';}
 }
-
+ 
 // ===== EXPORT / IMPORT =====
 async function exportAllFiles(){
   toast('Preparing export...','info');
@@ -1398,7 +1454,7 @@ document.getElementById('importFileInput').addEventListener('change',async(e)=>{
   };
   reader.readAsText(file);
 });
-
+ 
 function clearAllData(){
   if(!confirm('⚠️ Delete ALL data? Cannot be undone.'))return;
   if(!confirm('Absolutely sure? All files and tasks will be lost.'))return;
@@ -1406,7 +1462,7 @@ function clearAllData(){
   const tx=db.transaction('blobs','readwrite');tx.objectStore('blobs').clear();
   saveState();renderHome();toast('All data cleared','info');
 }
-
+ 
 // ===== SEARCH =====
 document.getElementById('searchToggleBtn').addEventListener('click',()=>{
   const sb=document.getElementById('searchBarHome');const shown=sb.style.display!=='none';
@@ -1420,12 +1476,12 @@ document.getElementById('homeSearchInput').addEventListener('input',(e)=>{
   list.innerHTML=filtered.length===0?`<div class="empty-state"><div class="empty-icon">🔍</div><div class="empty-title">No results</div></div>`:filtered.slice(0,10).map(f=>fileCardHTML(f)).join('');
 });
 document.getElementById('filesSearchInput').addEventListener('input',()=>renderFiles());
-
+ 
 // ===== MODAL UTILS =====
 function openModal(id){document.getElementById(id).classList.add('open');}
 function closeModal(id){document.getElementById(id).classList.remove('open');}
 function closeOnBackdrop(e,id){if(e.target===document.getElementById(id))closeModal(id);}
-
+ 
 // ===== TOAST =====
 function toast(msg,type='info'){
   const icons={success:'✅',error:'❌',info:'ℹ️'};
@@ -1435,7 +1491,7 @@ function toast(msg,type='info'){
 }
 function escHtml(str){return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function formatSize(bytes){if(!bytes)return'0 B';if(bytes<1024)return bytes+' B';if(bytes<1048576)return(bytes/1024).toFixed(1)+' KB';return(bytes/1048576).toFixed(1)+' MB';}
-
+ 
 // ===== INIT =====
 async function init(){
   await initDB();
